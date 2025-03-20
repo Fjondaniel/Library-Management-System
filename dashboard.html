@@ -159,17 +159,39 @@ function displayBooks(filter = "") {
         )
         .forEach((book, index) => {
             bookList.innerHTML += `
-                <div class="bg-[#EDE0D4] p-4 rounded-lg shadow-md flex flex-col items-center border border-[#C9A66B] hover:shadow-xl transition">
-                    <img src="${book.image}" alt="Book Cover" class="w-32 h-40 object-cover rounded-lg mb-2">
-                    <h3 class="text-lg font-bold text-center text-[#5C4033]">${book.title}</h3>
-                    <p class="text-gray-700 text-center">${book.author}</p>
-                    <p class="text-gray-500 text-sm text-center">ISBN: ${book.isbn}</p>
-                    <p class="text-gray-500 text-sm text-center">Status: ${book.status}</p>
-                    <div class="mt-2 flex space-x-2">
-                        <button onclick="editBook(${index})" class="bg-green-500 text-white px-3 py-1 rounded-lg shadow-md hover:bg-green-700 transition">Edit</button>
-                        <button onclick="deleteBook(${index})" class="bg-red-500 text-white px-3 py-1 rounded-lg shadow-md hover:bg-red-700 transition">Delete</button>
-                    </div>
-                </div>`;
+                <div class="bg-[#FAF3E0] p-5 rounded-xl shadow-lg flex flex-col items-center border border-[#C9A66B] 
+    hover:shadow-2xl hover:scale-105 transition-transform duration-300 ease-in-out">
+    
+    <!-- Book Cover with Hover Effect -->
+    <div class="overflow-hidden rounded-lg">
+        <img src="${book.image}" alt="Book Cover" 
+            class="w-36 h-48 object-cover rounded-lg transition-transform duration-300 hover:scale-110">
+    </div>
+
+    <!-- Book Details -->
+    <h3 class="text-xl font-semibold text-[#5C4033] text-center mt-3">${book.title}</h3>
+    <p class="text-gray-700 text-center text-sm">${book.author}</p>
+    <p class="text-gray-500 text-xs text-center font-medium">ISBN: ${book.isbn}</p>
+    <p class="text-xs text-center font-medium ${book.status === 'available' ? 'text-green-600' : 'text-red-600'}">
+        Status: ${book.status}
+    </p>
+
+    <!-- Buttons Section -->
+    <div class="mt-4 flex space-x-3">
+        <button onclick="editBook(${index})" 
+            class="bg-green-600 text-white px-4 py-2 rounded-lg shadow-md 
+                hover:bg-green-700 hover:shadow-xl hover:translate-y-[-2px] transition duration-300">
+            ✏️ Edit
+        </button>
+
+        <button onclick="deleteBook(${index})" 
+            class="bg-red-600 text-white px-4 py-2 rounded-lg shadow-md 
+                hover:bg-red-700 hover:shadow-xl hover:translate-y-[-2px] transition duration-300">
+            🗑️ Delete
+        </button>
+    </div>
+</div>
+`;
         });
 
     updateBookStats(); // Update stats every time books are displayed
