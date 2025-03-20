@@ -23,13 +23,21 @@
         .antique-bg{
             background-image: url("img/books.jpg");
         }
+        .logo {
+    width: 200px; /* Adjust as needed */
+    height: auto;
+}
+
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
     
     <!-- Navbar -->
     <nav class="bg-[#5a3e2b] text-white p-5 flex justify-between items-center shadow-lg">
-        <h1 class="text-3xl font-bold">📖 Stack OverBook</h1>
+        <h1 class="text-3xl font-bold">
+            <img src="./img/StackOverbook.png" alt="Stack OverBook" class="logo">
+        </h1>
+        
         
         <!-- Burger Button -->
         <button id="menu-btn" class="md:hidden text-white focus:outline-none">
@@ -71,17 +79,17 @@
     
     
    <!-- About Section -->
-   <section id="about" class="p-12 text-center bg-[#f5efe0] relative">
+   <section id="about" class="p-8 text-center bg-[#f5efe0] relative">
     <div class="max-w-3xl mx-auto bg-white/50 p-10 rounded-xl shadow-xl backdrop-blur-md border border-[#c4a484]/50">
-        <h3 class="text-5xl font-extrabold text-[#5a3e2b] uppercase tracking-wide flex items-center justify-center gap-3">
-            <i class="fa-solid fa-book-open text-[#b08d6e]"></i> About Stack OverBook
+        <h3 class="text-5xl lg:text-4xl md:text-3xl sm:text-2xl xs:text-xl font-extrabold text-[#5a3e2b] uppercase tracking-wide flex flex-col items-center justify-center text-center">
+            About Stack OverBook
         </h3>
-        <p class="mt-6 text-xl text-gray-700 leading-relaxed">
+        <p class="mt-6 text-xl text-gray-700 leading-relaxed text-justify">
             📚 <span class="font-semibold text-[#5a3e2b]">Stack OverBook</span> is more than just a bookstore—it’s a sanctuary for antique book lovers. 
-            Nestled in the heart of literature enthusiasts, we offer a meticulously curated collection of **rare, vintage, and timeless literary treasures**.
+            Nestled in the heart of literature enthusiasts, we offer a meticulously curated collection of <strong>rare, vintage, and timeless literary treasures</strong>.
         </p>
-        <p class="mt-4 text-lg text-gray-700 leading-relaxed">
-            Our passion for **preserving literary history** drives us to connect book lovers with **stories from the past**, bound in exquisite craftsmanship. 
+        <p class="mt-4 text-lg text-gray-700 leading-relaxed text-justify">
+            Our passion for <strong>preserving literary history</strong> drives us to connect book lovers with <strong>stories from the past</strong>, bound in exquisite craftsmanship. 
             Whether you seek a forgotten classic or a unique collector's gem, Stack OverBook is where history meets the hands of modern readers.
         </p>
         <a href="#collection" 
@@ -90,6 +98,7 @@
         </a>
     </div>
 </section>
+
 
 
 <!-- Book Collection Preview -->
