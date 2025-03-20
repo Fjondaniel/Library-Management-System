@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stack OverBook - Antique Bookstore</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #f4ecd8;
+            font-family: 'Garamond', serif;
+        }
+        .antique-bg {
+            background-image: url('https://source.unsplash.com/1600x900/?antique,books');
+            background-size: cover;
+            background-position: center;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+    
+    <!-- Navbar -->
+    <nav class="bg-[#5a3e2b] text-white p-5 flex justify-between items-center shadow-lg">
+        <h1 class="text-3xl font-bold">📖 Stack OverBook</h1>
+        <div>
+            <a href="#about" class="mx-3 hover:underline">About</a>
+            <a href="#collection" class="mx-3 hover:underline">Collection</a>
+            <a href="#contact" class="mx-3 hover:underline">Contact</a>
+        </div>
+    </nav>
+    
+    <!-- Hero Section -->
+    <header class="antique-bg h-[500px] flex items-center justify-center text-center text-white px-6">
+        <div class="bg-[#5a3e2b]/70 p-10 rounded-lg shadow-lg">
+            <h2 class="text-4xl font-bold">Discover the Charm of Antique Books</h2>
+            <p class="mt-3 text-lg">Explore a timeless collection of literary treasures.</p>
+            <a href="index.html" class="mt-5 inline-block bg-[#c4a484] text-white px-6 py-3 rounded-lg shadow-lg hover:bg-[#b08d6e]">Browse Collection</a>
+        </div>
+    </header>
+    
+    <!-- About Section -->
+    <section id="about" class="p-10 text-center">
+        <h3 class="text-3xl font-bold text-[#5a3e2b]">About Stack OverBook</h3>
+        <p class="mt-4 text-lg text-gray-700 max-w-3xl mx-auto">Nestled in the heart of book lovers, Stack OverBook is a haven for antique book enthusiasts. With a carefully curated selection of rare and vintage books, we bring history to your hands.</p>
+    </section>
+    
+    <!-- Book Collection Preview -->
+    <section id="collection" class="bg-[#e3d5b9] p-10 text-center">
+        <h3 class="text-3xl font-bold text-[#5a3e2b]">Our Collection</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6 max-w-5xl mx-auto">
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <img src="https://source.unsplash.com/200x300/?vintage,book" alt="Vintage Book" class="w-full rounded-lg">
+                <h4 class="mt-3 font-semibold text-lg">The Timeless Tales</h4>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <img src="https://source.unsplash.com/200x300/?antique,book" alt="Antique Book" class="w-full rounded-lg">
+                <h4 class="mt-3 font-semibold text-lg">Whispers of the Past</h4>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <img src="https://source.unsplash.com/200x300/?rare,book" alt="Rare Book" class="w-full rounded-lg">
+                <h4 class="mt-3 font-semibold text-lg">Classic Literature</h4>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Contact Section -->
+    <section id="contact" class="p-10 text-center">
+        <h3 class="text-3xl font-bold text-[#5a3e2b]">Get in Touch</h3>
+        <p class="mt-3 text-lg text-gray-700">Visit us at 123 Vintage Lane, Booktown or email us at <span class="text-[#b08d6e]">info@stackoverbook.com</span></p>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="bg-[#5a3e2b] text-white text-center p-4">
+        <p>&copy; 2025 Stack OverBook. All rights reserved.</p>
+    </footer>
+    
+</body>
+</html>
