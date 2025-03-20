@@ -30,8 +30,11 @@
     <!-- Close Button -->
     <button id="close-btn" class="md:hidden absolute top-4 right-4 text-2xl text-white">&times;</button>
     
-    <h1 class="text-2xl font-bold mb-6">📜 Antique Bookstore</h1>
-    <h2 class="text-lg font-semibold mb-4">Manage Your Books</h2>
+
+    <h1 class="text-3xl font-bold">
+        <img src="./img/StackOverbook.png" alt="Stack OverBook" class="logo">
+    </h1>    
+    <h2 class="text-lg font-semibold mt-4 mb-2">Manage Your Books</h2>
     <form id="book-form" class="flex flex-col space-y-4">
         <input type="text" id="title" placeholder="Title" class="border p-2 rounded-lg text-gray-900 w-full" required>
         <input type="text" id="author" placeholder="Author" class="border p-2 rounded-lg text-gray-900 w-full" required>
@@ -44,7 +47,7 @@
         
         <div class="w-full bg-[#8B5A2B] text-white rounded-lg shadow-md cursor-pointer hover:bg-[#6D4227] transition">
             <input type="file" id="image" class="hidden" accept="image/*">
-            <label for="image" class="text-white px-4 py-2 block text-center">
+            <label for="image" class="text-white px-4 py-2 text-center">
                 📜 Upload Book Cover
             </label>
             <span id="file-name" class="ml-3 text-gray-700 italic"></span>
@@ -78,16 +81,20 @@
                 
                 <div class="w-full bg-[#8B5A2B] text-white rounded-lg shadow-md cursor-pointer hover:bg-[#6D4227] transition">
                     <input type="file" id="edit-image" class="hidden" accept="image/*">
-                    <label for="edit-image" class="text-white px-4 py-3">
+                    <label for="edit-image" class="text-white p-3 text-center">
                         📜 Upload Book Cover
                     </label>
                     <span id="edit-file-name" class="ml-3 text-gray-700 italic"></span>
                 </div>
                 
-                <div class="flex justify-end space-x-2">
-                    <button type="button" onclick="closeEditModal()" class="bg-gray-500 text-white p-3 rounded-lg shadow-md hover:bg-gray-600 transition">Cancel</button>
-                    <button type="submit" class="bg-green-500 text-white p-3 rounded-lg shadow-md hover:bg-green-600 transition">Save Changes</button>
-                </div>
+                <div class="flex justify-center space-x-2">
+                    <button type="button" onclick="closeEditModal()" class="bg-red-500 text-white p-3 rounded-lg shadow-md hover:bg-red-600 transition">
+                        Cancel
+                    </button>
+                    <button type="submit" class="bg-green-500 text-white p-3 rounded-lg shadow-md hover:bg-green-700 transition">
+                        Save Changes
+                    </button>
+                </div>                
             </form>
         </div>
     </div>
@@ -95,7 +102,7 @@
     <!-- Main Content -->
     <div class="flex-1 flex flex-col min-h-screen justify-between">
         <nav class="bg-[#5C4033] text-white p-4 shadow-md flex justify-between items-center">
-            <h1 class="text-2xl font-bold">📖 Vintage Library</h1>
+            <h1 class="text-xl mt-4 font-bold">📖 Library Management</h1>
             <input type="text" id="search" placeholder="Search books..." class="border p-2 rounded-lg text-gray-900 w-72">
             <button id="burger-btn" class="md:hidden  z-50 bg-[#5C4033] text-white p-3 rounded-lg shadow-lg">
                 ☰
