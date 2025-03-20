@@ -5,7 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stack OverBook - Antique Bookstore</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
+        html {
+    scroll-behavior: smooth;
+}
+
         body {
             background-color: #f4ecd8;
             font-family: 'Garamond', serif;
@@ -15,6 +20,9 @@
             background-size: cover;
             background-position: center;
         }
+        .antique-bg{
+            background-image: url("img/books.jpg");
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
@@ -22,57 +30,135 @@
     <!-- Navbar -->
     <nav class="bg-[#5a3e2b] text-white p-5 flex justify-between items-center shadow-lg">
         <h1 class="text-3xl font-bold">📖 Stack OverBook</h1>
-        <div>
-            <a href="#about" class="mx-3 hover:underline">About</a>
-            <a href="#collection" class="mx-3 hover:underline">Collection</a>
-            <a href="#contact" class="mx-3 hover:underline">Contact</a>
+        
+        <!-- Burger Button -->
+        <button id="menu-btn" class="md:hidden text-white focus:outline-none">
+            ☰
+        </button>
+    
+        <!-- Navigation Links -->
+        <div id="menu" class="hidden md:flex space-x-6">
+            <a href="#about" class="hover:underline">About</a>
+            <a href="#collection" class="hover:underline">Collection</a>
+            <a href="#contact" class="hover:underline">Contact</a>
         </div>
     </nav>
     
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="hidden bg-[#5a3e2b] text-white flex flex-col space-y-4 p-4 md:hidden">
+        <a href="#about" class="hover:underline">About</a>
+        <a href="#collection" class="hover:underline">Collection</a>
+        <a href="#contact" class="hover:underline">Contact</a>
+    </div>
+    
     <!-- Hero Section -->
-    <header class="antique-bg h-[500px] flex items-center justify-center text-center text-white px-6">
-        <div class="bg-[#5a3e2b]/70 p-10 rounded-lg shadow-lg">
-            <h2 class="text-4xl font-bold">Discover the Charm of Antique Books</h2>
-            <p class="mt-3 text-lg">Explore a timeless collection of literary treasures.</p>
-            <a href="index.html" class="mt-5 inline-block bg-[#c4a484] text-white px-6 py-3 rounded-lg shadow-lg hover:bg-[#b08d6e]">Browse Collection</a>
+    <header class="antique-bg h-[700px] flex items-center justify-center text-center text-white px-6 relative">
+        <!-- Glass Effect Overlay -->
+        <div class="absolute inset-0 bg-white/10 backdrop-blur-s"></div>
+    
+        <div class="relative bg-[#5a3e2b]/90 p-10 rounded-lg shadow-lg text-white text-center">
+            <h2 class="text-4xl font-bold">Uncover the Legacy of Antique Books</h2>
+            <p class="mt-3 text-lg">
+                Welcome to <span class="font-semibold">Stack OverBook</span>, where timeless literature meets modern discovery. 
+                Explore a curated collection of antique books, each holding a piece of history waiting to be explored.
+            </p>
+            <a href="index.html" class="mt-5 inline-block bg-[#c4a484] text-white px-6 py-3 rounded-lg shadow-lg hover:bg-[#b08d6e]">
+                Browse Collection
+            </a>
         </div>
+        
     </header>
     
-    <!-- About Section -->
-    <section id="about" class="p-10 text-center">
-        <h3 class="text-3xl font-bold text-[#5a3e2b]">About Stack OverBook</h3>
-        <p class="mt-4 text-lg text-gray-700 max-w-3xl mx-auto">Nestled in the heart of book lovers, Stack OverBook is a haven for antique book enthusiasts. With a carefully curated selection of rare and vintage books, we bring history to your hands.</p>
-    </section>
     
-    <!-- Book Collection Preview -->
-    <section id="collection" class="bg-[#e3d5b9] p-10 text-center">
-        <h3 class="text-3xl font-bold text-[#5a3e2b]">Our Collection</h3>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6 max-w-5xl mx-auto">
-            <div class="bg-white p-6 rounded-lg shadow-lg">
-                <img src="https://source.unsplash.com/200x300/?vintage,book" alt="Vintage Book" class="w-full rounded-lg">
-                <h4 class="mt-3 font-semibold text-lg">The Timeless Tales</h4>
-            </div>
-            <div class="bg-white p-6 rounded-lg shadow-lg">
-                <img src="https://source.unsplash.com/200x300/?antique,book" alt="Antique Book" class="w-full rounded-lg">
-                <h4 class="mt-3 font-semibold text-lg">Whispers of the Past</h4>
-            </div>
-            <div class="bg-white p-6 rounded-lg shadow-lg">
-                <img src="https://source.unsplash.com/200x300/?rare,book" alt="Rare Book" class="w-full rounded-lg">
-                <h4 class="mt-3 font-semibold text-lg">Classic Literature</h4>
-            </div>
+   <!-- About Section -->
+   <section id="about" class="p-12 text-center bg-[#f5efe0] relative">
+    <div class="max-w-3xl mx-auto bg-white/50 p-10 rounded-xl shadow-xl backdrop-blur-md border border-[#c4a484]/50">
+        <h3 class="text-5xl font-extrabold text-[#5a3e2b] uppercase tracking-wide flex items-center justify-center gap-3">
+            <i class="fa-solid fa-book-open text-[#b08d6e]"></i> About Stack OverBook
+        </h3>
+        <p class="mt-6 text-xl text-gray-700 leading-relaxed">
+            📚 <span class="font-semibold text-[#5a3e2b]">Stack OverBook</span> is more than just a bookstore—it’s a sanctuary for antique book lovers. 
+            Nestled in the heart of literature enthusiasts, we offer a meticulously curated collection of **rare, vintage, and timeless literary treasures**.
+        </p>
+        <p class="mt-4 text-lg text-gray-700 leading-relaxed">
+            Our passion for **preserving literary history** drives us to connect book lovers with **stories from the past**, bound in exquisite craftsmanship. 
+            Whether you seek a forgotten classic or a unique collector's gem, Stack OverBook is where history meets the hands of modern readers.
+        </p>
+        <a href="#collection" 
+            class="mt-6 inline-block bg-[#c4a484] text-white text-lg font-semibold px-8 py-3 rounded-lg shadow-lg hover:bg-[#b08d6e] transition-all duration-300">
+            Explore Our Collection <i class="fa-solid fa-arrow-right ml-2"></i>
+        </a>
+    </div>
+</section>
+
+
+<!-- Book Collection Preview -->
+<section id="collection" class="bg-[#e3d5b9] p-12 text-center">
+    <h3 class="text-4xl font-bold text-[#5a3e2b] tracking-wide">Our Collection</h3>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8 max-w-6xl mx-auto">
+        <div class="bg-white p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105">
+            <img src="img/vbook.jpg" alt="Vintage Book" class="w-full rounded-lg shadow-md">
+            <h4 class="mt-4 font-semibold text-lg text-[#5a3e2b]">The Timeless Tales</h4>
         </div>
-    </section>
+        <div class="bg-white p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105">
+            <img src="img/abook.jpg" alt="Antique Book" class="w-full rounded-lg shadow-md">
+            <h4 class="mt-4 font-semibold text-lg text-[#5a3e2b]">Whispers of the Past</h4>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105">
+            <img src="img/cbooks.jpg" alt="Rare Book" class="w-full rounded-lg shadow-md">
+            <h4 class="mt-4 font-semibold text-lg text-[#5a3e2b]">Classic Literature</h4>
+        </div>
+    </div>
+</section>
+
+<section id="contact" class="p-12 text-center bg-[#f5efe0] rounded-lg shadow-lg">
+    <h3 class="text-4xl font-bold text-[#5a3e2b] tracking-wide flex items-center justify-center gap-3">
+         Get in Touch
+    </h3>
     
-    <!-- Contact Section -->
-    <section id="contact" class="p-10 text-center">
-        <h3 class="text-3xl font-bold text-[#5a3e2b]">Get in Touch</h3>
-        <p class="mt-3 text-lg text-gray-700">Visit us at 123 Vintage Lane, Booktown or email us at <span class="text-[#b08d6e]">info@stackoverbook.com</span></p>
-    </section>
+    <p class="mt-6 text-lg text-gray-700 leading-relaxed flex items-center justify-center gap-2">
+        <i class="fa-solid fa-map-marker-alt text-[#b08d6e]"></i> 
+        <span class="font-semibold">123 Vintage Lane, Booktown</span>
+    </p>
     
-    <!-- Footer -->
-    <footer class="bg-[#5a3e2b] text-white text-center p-4">
-        <p>&copy; 2025 Stack OverBook. All rights reserved.</p>
-    </footer>
+    <p class="mt-3 text-lg text-gray-700 leading-relaxed flex items-center justify-center gap-2">
+        <i class="fa-solid fa-envelope text-[#b08d6e]"></i>  
+        <a href="mailto:info@stackoverbook.com" class="text-[#b08d6e] font-semibold hover:underline">
+            info@stackoverbook.com
+        </a>
+    </p>
     
+    <p class="mt-3 text-lg text-gray-700 leading-relaxed flex items-center justify-center gap-2">
+        <i class="fa-solid fa-phone-alt text-[#b08d6e]"></i>  
+        <span class="font-semibold">+1 (234) 567-890</span>
+    </p>
+
+    <div class="mt-6 flex justify-center space-x-6 text-2xl">
+        <a href="#" class="text-[#5a3e2b] hover:text-[#b08d6e]">
+            <i class="fa-brands fa-facebook"></i>
+        </a>
+        <a href="#" class="text-[#5a3e2b] hover:text-[#b08d6e]">
+            <i class="fa-brands fa-twitter"></i>
+        </a>
+        <a href="#" class="text-[#5a3e2b] hover:text-[#b08d6e]">
+            <i class="fa-brands fa-instagram"></i>
+        </a>
+    </div>
+</section>
+
+
+<!-- Footer -->
+<footer class="bg-[#5a3e2b] text-white text-center p-4 text-sm">
+    <p>&copy; 2025 Stack OverBook. All rights reserved.</p>
+</footer>
+<script>
+    const menuBtn = document.getElementById("menu-btn");
+    const menu = document.getElementById("menu");
+    const mobileMenu = document.getElementById("mobile-menu");
+
+    menuBtn.addEventListener("click", () => {
+        mobileMenu.classList.toggle("hidden");
+    });
+</script>
 </body>
 </html>
