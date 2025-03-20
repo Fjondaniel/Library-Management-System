@@ -3,71 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Library Management System</title>
+    <title>Antique Bookstore</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        body { font-family: 'Garamond', serif; }
+    </style>
 </head>
-<body class="bg-gray-100 min-h-screen flex">
+<body class="bg-[#F5E1DA] min-h-screen flex">
     
-    <!-- Sidebar Area-->
-    <aside class="bg-blue-600 text-white w-64 min-h-screen p-6 shadow-lg">
-        <h1 class="text-2xl font-bold mb-6">📗 Stack OverBooks</h1>
+    <!-- Sidebar -->
+    <aside class="bg-[#5C4033] text-[#EDE0D4] w-64 min-h-screen p-6 shadow-xl">
+        <h1 class="text-2xl font-bold mb-6">📜 Antique Bookstore</h1>
         <h2 class="text-lg font-semibold mb-4">Manage Your Books</h2>
-        <!-- Book Form -->
-        <form id="book-form" class="flex flex-col space-y-4" enctype="multipart/form-data">
-            <input type="text" id="title" placeholder="Title" class="border p-2 rounded-lg text-gray-800 w-full" required>
-            <input type="text" id="author" placeholder="Author" class="border p-2 rounded-lg text-gray-800 w-full" required>
-            <input type="text" id="isbn" placeholder="ISBN" class="border p-2 rounded-lg text-gray-800 w-full" required>
-            <input type="file" id="image" class="border p-2 rounded-lg text-gray-800 w-full" accept="image/*">
-            <button type="submit" class="bg-green-600 text-white p-2 rounded-lg shadow-md hover:bg-green-700">Add Book</button>
+        <form id="book-form" class="flex flex-col space-y-4">
+            <input type="text" id="title" placeholder="Title" class="border p-2 rounded-lg text-gray-900 w-full" required>
+            <input type="text" id="author" placeholder="Author" class="border p-2 rounded-lg text-gray-900 w-full" required>
+            <input type="text" id="isbn" placeholder="ISBN" class="border p-2 rounded-lg text-gray-900 w-full" required>
+            
+            <div class=" w-full bg-[#8B5A2B] text-white rounded-lg shadow-md cursor-pointer hover:bg-[#6D4227] transition">
+                <input type="file" id="image" class="hidden" accept="image/*">
+                <label for="image" class="text-white px-4 py-2 ">
+                    📜 Upload Book Cover
+                </label>
+                <span id="file-name" class="ml-3 text-gray-700 italic"></span>
+            </div>
+    
+            <button type="submit" class="bg-[#C9A66B] text-white p-2 rounded-lg shadow-md hover:bg-[#A67C52]">
+                Add Book
+            </button>
         </form>
     </aside>
-
-    <!-- Edit Book Modal -->
-    <div id="edit-modal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center hidden">
-        <div class="bg-white p-6 rounded-lg shadow-lg w-96">
-            <h2 class="text-2xl font-bold mb-4">Edit Book</h2>
-            <form id="edit-book-form" class="flex flex-col space-y-4">
-                <input type="text" id="edit-title" placeholder="Title" class="border p-2 rounded-lg text-gray-800 w-full" required>
-                <input type="text" id="edit-author" placeholder="Author" class="border p-2 rounded-lg text-gray-800 w-full" required>
-                <input type="text" id="edit-isbn" placeholder="ISBN" class="border p-2 rounded-lg text-gray-800 w-full" required>
-                <input type="file" id="edit-image" class="border p-2 rounded-lg text-gray-800 w-full" accept="image/*">
-                <div class="flex justify-end space-x-2">
-                    <button type="button" onclick="closeEditModal()" class="bg-gray-500 text-white p-2 rounded-lg shadow-md hover:bg-gray-600">Cancel</button>
-                    <button type="submit" class="bg-green-600 text-white p-2 rounded-lg shadow-md hover:bg-green-700">Save Changes</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
+    
+    
     <!-- Main Content -->
     <div class="flex-1 flex flex-col min-h-screen justify-between">
-
-        <!-- Navbar -->
-        <nav class="bg-blue-600 text-white p-4 shadow-lg flex justify-between items-center">
-            <h1 class="text-2xl font-bold">📚 Library Management</h1>
-            <input type="text" id="search" placeholder="Search books..." class="border p-2 rounded-lg text-gray-800 w-72">
+        <nav class="bg-[#5C4033] text-white p-4 shadow-md flex justify-between items-center">
+            <h1 class="text-2xl font-bold">📖 Vintage Library</h1>
+            <input type="text" id="search" placeholder="Search books..." class="border p-2 rounded-lg text-gray-900 w-72">
         </nav>
         
-        <!-- Book List Section -->
         <section class="max-w-5xl mx-auto bg-white p-8 rounded-lg shadow-lg mt-6">
-            <h2 class="text-2xl font-bold text-center text-gray-800 mb-4">Book Collection</h2>
+            <h2 class="text-2xl font-bold text-center text-[#5C4033] mb-4">Book Collection</h2>
             <div id="book-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
         </section>
-
-        <!-- Footer -->
-        <footer class="bg-gray-800 text-white text-center p-4 mt-6">
-            <p>&copy; 2025 Stack OverBooks Library. All rights reserved.</p>
+        
+        <footer class="bg-[#5C4033] text-white text-center p-4 mt-6">
+            <p>&copy; 2025 Antique Bookstore. All rights reserved.</p>
         </footer>
     </div>
-
+    
     <script>
         const bookForm = document.getElementById("book-form");
         const bookList = document.getElementById("book-list");
         const searchInput = document.getElementById("search");
         let books = [];
-        let editIndex = null;
-
+        
         bookForm.addEventListener("submit", function(event) {
             event.preventDefault();
             const title = document.getElementById("title").value;
@@ -79,7 +70,6 @@
             reader.readAsDataURL(imageFile);
             reader.onload = function () {
                 const image = reader.result;
-                
                 const book = { title, author, isbn, image };
                 books.push(book);
                 displayBooks();
@@ -92,54 +82,15 @@
             books.filter(book => book.title.toLowerCase().includes(filter) || book.author.toLowerCase().includes(filter) || book.isbn.includes(filter))
                 .forEach((book, index) => {
                     bookList.innerHTML += `
-                        <div class="bg-white p-4 rounded-lg shadow-md flex flex-col items-center">
+                        <div class="bg-[#EDE0D4] p-4 rounded-lg shadow-md flex flex-col items-center border border-[#C9A66B]">
                             <img src="${book.image}" alt="Book Cover" class="w-32 h-40 object-cover rounded-lg mb-2">
-                            <h3 class="text-lg font-bold text-center">${book.title}</h3>
+                            <h3 class="text-lg font-bold text-center text-[#5C4033]">${book.title}</h3>
                             <p class="text-gray-700 text-center">${book.author}</p>
                             <p class="text-gray-500 text-sm text-center">ISBN: ${book.isbn}</p>
-                            <div class="mt-2 flex space-x-2">
-                                <button onclick="editBook(${index})" class="bg-yellow-500 text-white px-3 py-1 rounded-lg shadow-md hover:bg-yellow-600">Edit</button>
-                                <button onclick="deleteBook(${index})" class="bg-red-500 text-white px-3 py-1 rounded-lg shadow-md hover:bg-red-600">Delete</button>
-                            </div>
+                            <button onclick="deleteBook(${index})" class="bg-red-500 text-white px-3 py-1 mt-2 rounded-lg shadow-md hover:bg-red-600">Delete</button>
                         </div>`;
                 });
         }
-
-        function editBook(index) {
-            const book = books[index];
-            document.getElementById("edit-title").value = book.title;
-            document.getElementById("edit-author").value = book.author;
-            document.getElementById("edit-isbn").value = book.isbn;
-            editIndex = index;
-            document.getElementById("edit-modal").classList.remove("hidden");
-        }
-
-        function closeEditModal() {
-            document.getElementById("edit-modal").classList.add("hidden");
-        }
-
-        document.getElementById("edit-book-form").addEventListener("submit", function(event) {
-            event.preventDefault();
-            const title = document.getElementById("edit-title").value;
-            const author = document.getElementById("edit-author").value;
-            const isbn = document.getElementById("edit-isbn").value;
-            const imageFile = document.getElementById("edit-image").files[0];
-
-            if (imageFile) {
-                const reader = new FileReader();
-                reader.readAsDataURL(imageFile);
-                reader.onload = function () {
-                    const image = reader.result;
-                    books[editIndex] = { title, author, isbn, image };
-                    displayBooks();
-                    closeEditModal();
-                };
-            } else {
-                books[editIndex] = { ...books[editIndex], title, author, isbn };
-                displayBooks();
-                closeEditModal();
-            }
-        });
 
         function deleteBook(index) {
             Swal.fire({
@@ -147,22 +98,18 @@
                 text: "You won't be able to revert this!",
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonColor: '#3085d6',
+                confirmButtonColor: '#C9A66B',
                 cancelButtonColor: '#d33',
                 confirmButtonText: 'Yes, delete it!'
             }).then((result) => {
                 if (result.isConfirmed) {
                     books.splice(index, 1);
                     displayBooks();
-                    Swal.fire(
-                        'Deleted!',
-                        'Your book has been deleted.',
-                        'success'
-                    );
+                    Swal.fire('Deleted!', 'Your book has been removed.', 'success');
                 }
             });
         }
-
+        
         searchInput.addEventListener("input", function() {
             const filter = searchInput.value.toLowerCase();
             displayBooks(filter);
