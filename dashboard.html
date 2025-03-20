@@ -7,8 +7,10 @@
         <script src="https://cdn.tailwindcss.com"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <style>
-            body { font-family: 'Garamond', serif; }
-            /* Add transition for modal visibility */
+            body { 
+                font-family: 'Garamond', serif; 
+            }
+
             #edit-modal {
                 transition: opacity 0.3s ease-in-out;
             }
@@ -22,310 +24,297 @@
         </style>
     </head>
     <body class="bg-[#F5E1DA] min-h-screen flex flex-col md:flex-row">
-    <div id="sidebar" class="fixed inset-y-0 left-0 w-64 bg-[#5C4033] text-[#EDE0D4] p-6 shadow-xl transform -translate-x-full transition-transform duration-300 ease-in-out z-50 md:translate-x-0 md:relative md:w-64">
-            <!-- Close Button -->
+        <div id="sidebar" class="fixed inset-y-0 left-0 w-64 bg-[#5C4033] text-[#EDE0D4] p-6 shadow-xl transform -translate-x-full transition-transform duration-300 ease-in-out z-50 md:translate-x-0 md:relative md:w-64">
+
             <button id="close-btn" class="md:hidden absolute top-1 right-3 text-2xl text-white">&times;</button>
-            
 
-            <h1 class="text-3xl font-bold mb-6 mt-4">
-                <img src="./img/StackOverbook.png" alt="Stack OverBook" class="logo">
-            </h1>
-            <h2 class="text-lg font-semibold mb-2">Manage Your Books</h2>
-            <form id="book-form" class="flex flex-col space-y-4">
-                <input type="text" id="title" placeholder="Title" class="border p-2 rounded-lg text-gray-900 w-full" required>
-                <input type="text" id="author" placeholder="Author" class="border p-2 rounded-lg text-gray-900 w-full" required>
-                <input type="text" id="isbn" placeholder="ISBN" class="border p-2 rounded-lg text-gray-900 w-full" required>
-                <select id="status" class="border p-2 rounded-lg text-gray-900 w-full" required>
-                    <option value="" disabled selected>Availability Status</option>
-                    <option value="available">Available</option>
-                    <option value="unavailable">Unavailable</option>
-                </select>
-                
-                <div class="w-full bg-[#8B5A2B] text-white rounded-lg shadow-md cursor-pointer hover:bg-[#6D4227] transition p-2">
-                    <input type="file" id="image" class="hidden" accept="image/*">
-                    <label for="image" class="text-white px-4 py-2 text-center">
-                        📜 Upload Book Cover
-                    </label>
-                    <span id="file-name" class="ml-3 text-gray-700 italic"></span>
-                </div>
-
-                <button type="submit" class="bg-[#C9A66B] text-white p-2 rounded-lg shadow-md hover:bg-[#A67C52]">
-                    Add Book
-                </button>
-            </form>
-        </div>
-
-
-        <!-- Overlay (for small screens) -->
-        <div id="overlay" class="fixed inset-0 bg-black opacity-50 hidden md:hidden z-40"></div>
-
-        <!-- Main Content -->
-        <div class="flex-1 flex flex-col min-h-screen justify-between">
-            <nav class="bg-[#5C4033] text-white p-4 shadow-md flex justify-between items-center">
-                <h1 class="text-xl font-bold">📖 Library Management</h1>
-                <input type="text" id="search" placeholder="Search books..." class="border p-2 rounded-lg text-gray-900 w-72">
-                <button id="burger-btn" class="md:hidden  z-50 bg-[#5C4033] text-white p-3 rounded-lg shadow-lg">
-                    ☰
-                </button>
-            </nav>
-            <section class="max-w-5xl mx-auto bg-[#FAF3E0] p-8 rounded-lg shadow-xl mt-6 border border-[#C9A66B]">
-                <h2 class="text-3xl font-extrabold text-center text-[#5C4033] mb-6 uppercase tracking-wide">
-                    📊 Book Statistics
-                </h2>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 text-center">
-                    <div class="bg-white p-6 rounded-xl shadow-lg border-2 border-[#C9A66B] transition transform hover:scale-105 hover:shadow-xl">
-                        <h3 class="text-xl font-semibold text-[#5C4033]">📚 Total Books</h3>
-                        <p id="total-books" class="text-3xl font-bold text-[#8B5A2B] mt-2">0</p>
-                    </div>
-                    <div class="bg-white p-6 rounded-xl shadow-lg border-2 border-green-500 transition transform hover:scale-105 hover:shadow-xl">
-                        <h3 class="text-xl font-semibold text-[#5C4033]">✅ Available Books</h3>
-                        <p id="available-books" class="text-3xl font-bold text-green-600 mt-2">0</p>
-                    </div>
-                </div>
-            </section>
-            <section class="max-w-6xl mx-auto bg-white p-12 rounded-2xl shadow-2xl mt-10">
-                <h2 class="text-3xl md:text-4xl font-extrabold text-center text-[#5C4033] mb-6 uppercase tracking-wide">
-                    📚 Book Collection
-                </h2>
-            
-                <!-- Book List Grid (Dynamically Updated) -->
-                <div id="book-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-                    <!-- Books will be dynamically added here -->
-                </div>
-            </section>
-            
-            <footer class="bg-[#5C4033] text-white text-center p-4 mt-6">
-                <p>&copy; 2025 Antique Bookstore. All rights reserved.</p>
-            </footer>
-        </div>
-
-        <div id="edit-modal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center hidden">
-            <div class="bg-white p-8 rounded-lg shadow-lg w-11/12 md:w-96">
-                <h2 class="text-3xl font-bold mb-6 text-center text-[#5C4033]">Edit Book</h2>
-                <form id="edit-book-form" class="flex flex-col space-y-4">
-                    <input type="text" id="edit-title" placeholder="Title" class="border p-3 rounded-lg text-gray-900 w-full" required>
-                    <input type="text" id="edit-author" placeholder="Author" class="border p-3 rounded-lg text-gray-900 w-full" required>
-                    <input type="text" id="edit-isbn" placeholder="ISBN" class="border p-3 rounded-lg text-gray-900 w-full" required>
-                    <select id="edit-status" class="border p-3 rounded-lg text-gray-900 w-full" required>
+                <h1 class="text-3xl font-bold mb-6 mt-4">
+                    <img src="./img/StackOverbook.png" alt="Stack OverBook" class="logo">
+                </h1>
+                <h2 class="text-lg font-semibold mb-2">Manage Your Books</h2>
+                <form id="book-form" class="flex flex-col space-y-4">
+                    <input type="text" id="title" placeholder="Title" class="border p-2 rounded-lg text-gray-900 w-full" required>
+                    <input type="text" id="author" placeholder="Author" class="border p-2 rounded-lg text-gray-900 w-full" required>
+                    <input type="text" id="isbn" placeholder="ISBN" class="border p-2 rounded-lg text-gray-900 w-full" required>
+                    <select id="status" class="border p-2 rounded-lg text-gray-900 w-full" required>
                         <option value="" disabled selected>Availability Status</option>
                         <option value="available">Available</option>
                         <option value="unavailable">Unavailable</option>
                     </select>
                     
                     <div class="w-full bg-[#8B5A2B] text-white rounded-lg shadow-md cursor-pointer hover:bg-[#6D4227] transition p-2">
-                        <input type="file" id="edit-image" class="hidden" accept="image/*">
-                        <label for="edit-image" class="text-white px-4 py-2 text-center">
+                        <input type="file" id="image" class="hidden" accept="image/*">
+                        <label for="image" class="text-white px-4 py-2 text-center">
                             📜 Upload Book Cover
-                        </label>                  
-                        <span id="edit-file-name" class="ml-3 text-gray-700 italic"></span>
+                        </label>
+                        <span id="file-name" class="ml-3 text-gray-700 italic"></span>
                     </div>
-                    
-                    <div class="flex justify-center space-x-2">
-                        <button type="button" onclick="closeEditModal()" class="bg-red-500 text-white p-2 rounded-lg shadow-md hover:bg-red-700 transition">
-                            Cancel
-                        </button>
-                        <button type="submit" class="bg-green-500 text-white p-2 rounded-lg shadow-md hover:bg-green-700 transition">
-                            Save Changes
-                        </button>
-                    </div>                    
+
+                    <button type="submit" class="bg-[#C9A66B] text-white p-2 rounded-lg shadow-md hover:bg-[#A67C52]">
+                        Add Book
+                    </button>
                 </form>
-            </div>
         </div>
-        
+
+        <div id="overlay" class="fixed inset-0 bg-black opacity-50 hidden md:hidden z-40"></div>
+
+        <div class="flex-1 flex flex-col min-h-screen justify-between">
+                <nav class="bg-[#5C4033] text-white p-4 shadow-md flex justify-between items-center">
+                    <h1 class="text-xl font-bold">📖 Library Management</h1>
+                    <input type="text" id="search" placeholder="Search books..." class="border p-2 rounded-lg text-gray-900 w-72">
+                    <button id="burger-btn" class="md:hidden  z-50 bg-[#5C4033] text-white p-3 rounded-lg shadow-lg">
+                        ☰
+                    </button>
+                </nav>
+                <section class="max-w-5xl mx-auto bg-[#FAF3E0] p-8 rounded-lg shadow-xl mt-6 border border-[#C9A66B]">
+                    <h2 class="text-3xl font-extrabold text-center text-[#5C4033] mb-6 uppercase tracking-wide">
+                        📊 Book Statistics
+                    </h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 text-center">
+                        <div class="bg-white p-6 rounded-xl shadow-lg border-2 border-[#C9A66B] transition transform hover:scale-105 hover:shadow-xl">
+                            <h3 class="text-xl font-semibold text-[#5C4033]">📚 Total Books</h3>
+                            <p id="total-books" class="text-3xl font-bold text-[#8B5A2B] mt-2">0</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-xl shadow-lg border-2 border-green-500 transition transform hover:scale-105 hover:shadow-xl">
+                            <h3 class="text-xl font-semibold text-[#5C4033]">✅ Available Books</h3>
+                            <p id="available-books" class="text-3xl font-bold text-green-600 mt-2">0</p>
+                        </div>
+                    </div>
+                </section>
+                <section class="max-w-6xl mx-auto bg-white p-12 rounded-2xl shadow-2xl mt-10">
+                    <h2 class="text-3xl md:text-4xl font-extrabold text-center text-[#5C4033] mb-6 uppercase tracking-wide">
+                        📚 Book Collection
+                    </h2>
+                
+                    <div id="book-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                    </div>
+                </section>
+                
+                <footer class="bg-[#5C4033] text-white text-center p-4 mt-6">
+                    <p>&copy; 2025 Antique Bookstore. All rights reserved.</p>
+                </footer>
+        </div>
+
+        <div id="edit-modal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center hidden">
+                <div class="bg-white p-8 rounded-lg shadow-lg w-11/12 md:w-96">
+                    <h2 class="text-3xl font-bold mb-6 text-center text-[#5C4033]">Edit Book</h2>
+                    <form id="edit-book-form" class="flex flex-col space-y-4">
+                        <input type="text" id="edit-title" placeholder="Title" class="border p-3 rounded-lg text-gray-900 w-full" required>
+                        <input type="text" id="edit-author" placeholder="Author" class="border p-3 rounded-lg text-gray-900 w-full" required>
+                        <input type="text" id="edit-isbn" placeholder="ISBN" class="border p-3 rounded-lg text-gray-900 w-full" required>
+                        <select id="edit-status" class="border p-3 rounded-lg text-gray-900 w-full" required>
+                            <option value="" disabled selected>Availability Status</option>
+                            <option value="available">Available</option>
+                            <option value="unavailable">Unavailable</option>
+                        </select>
+                        
+                        <div class="w-full bg-[#8B5A2B] text-white rounded-lg shadow-md cursor-pointer hover:bg-[#6D4227] transition p-2">
+                            <input type="file" id="edit-image" class="hidden" accept="image/*">
+                            <label for="edit-image" class="text-white px-4 py-2 text-center">
+                                📜 Upload Book Cover
+                            </label>                  
+                            <span id="edit-file-name" class="ml-3 text-gray-700 italic"></span>
+                        </div>
+                        
+                        <div class="flex justify-center space-x-2">
+                            <button type="button" onclick="closeEditModal()" class="bg-red-500 text-white p-2 rounded-lg shadow-md hover:bg-red-700 transition">
+                                Cancel
+                            </button>
+                            <button type="submit" class="bg-green-500 text-white p-2 rounded-lg shadow-md hover:bg-green-700 transition">
+                                Save Changes
+                            </button>
+                        </div>                    
+                    </form>
+                </div>
+        </div>
+            
         <script>
-            const bookForm = document.getElementById("book-form");
-const bookList = document.getElementById("book-list");
-const searchInput = document.getElementById("search");
-let books = JSON.parse(localStorage.getItem("books")) || [];
-let editIndex = null;
+                const bookForm = document.getElementById("book-form");
+                const bookList = document.getElementById("book-list");
+                const searchInput = document.getElementById("search");
+                let books = JSON.parse(localStorage.getItem("books")) || [];
+                let editIndex = null;
 
-// Function to update book statistics
-function updateBookStats() {
-    const totalBooks = books.length;
-    const availableBooks = books.filter(book => book.status === "available").length;
+                function updateBookStats() {
+                    const totalBooks = books.length;
+                    const availableBooks = books.filter(book => book.status === "available").length;
 
-    document.getElementById("total-books").textContent = totalBooks;
-    document.getElementById("available-books").textContent = availableBooks;
-}
+                    document.getElementById("total-books").textContent = totalBooks;
+                    document.getElementById("available-books").textContent = availableBooks;
+                }
 
-// Function to display books
-function displayBooks(filter = "") {
-    bookList.innerHTML = "";
-    books
-        .filter(book =>
-            book.title.toLowerCase().includes(filter) ||
-            book.author.toLowerCase().includes(filter) ||
-            book.isbn.includes(filter)
-        )
-        .forEach((book, index) => {
-            bookList.innerHTML += `
-                <div class="bg-[#FAF3E0] p-5 rounded-xl shadow-lg flex flex-col items-center border border-[#C9A66B] 
-    hover:shadow-2xl hover:scale-105 transition-transform duration-300 ease-in-out">
-    
-    <!-- Book Cover with Hover Effect -->
-    <div class="overflow-hidden rounded-lg">
-        <img src="${book.image}" alt="Book Cover" 
-            class="w-36 h-48 object-cover rounded-lg transition-transform duration-300 hover:scale-110">
-    </div>
+                function displayBooks(filter = "") {
+                    bookList.innerHTML = "";
+                    books
+                        .filter(book =>
+                            book.title.toLowerCase().includes(filter) ||
+                            book.author.toLowerCase().includes(filter) ||
+                            book.isbn.includes(filter)
+                        )
+                        .forEach((book, index) => {
+                            bookList.innerHTML += `
+                                <div class="bg-[#FAF3E0] p-5 rounded-xl shadow-lg flex flex-col items-center border border-[#C9A66B] 
+                    hover:shadow-2xl hover:scale-105 transition-transform duration-300 ease-in-out">
+                    
+                    <!-- Book Cover with Hover Effect -->
+                    <div class="overflow-hidden rounded-lg">
+                        <img src="${book.image}" alt="Book Cover" 
+                            class="w-36 h-48 object-cover rounded-lg transition-transform duration-300 hover:scale-110">
+                    </div>
 
-    <!-- Book Details -->
-    <h3 class="text-xl font-semibold text-[#5C4033] text-center mt-3">${book.title}</h3>
-    <p class="text-gray-700 text-center text-sm">${book.author}</p>
-    <p class="text-gray-500 text-xs text-center font-medium">ISBN: ${book.isbn}</p>
-    <p class="text-xs text-center font-medium ${book.status === 'available' ? 'text-green-600' : 'text-red-600'}">
-        Status: ${book.status}
-    </p>
+                    <!-- Book Details -->
+                    <h3 class="text-xl font-semibold text-[#5C4033] text-center mt-3">${book.title}</h3>
+                    <p class="text-gray-700 text-center text-sm">${book.author}</p>
+                    <p class="text-gray-500 text-xs text-center font-medium">ISBN: ${book.isbn}</p>
+                    <p class="text-xs text-center font-medium ${book.status === 'available' ? 'text-green-600' : 'text-red-600'}">
+                        Status: ${book.status}
+                    </p>
 
-    <!-- Buttons Section -->
-    <div class="mt-4 flex space-x-3">
-        <button onclick="editBook(${index})" 
-            class="bg-green-600 text-white px-4 py-2 rounded-lg shadow-md 
-                hover:bg-green-700 hover:shadow-xl hover:translate-y-[-2px] transition duration-300">
-            ✏️ Edit
-        </button>
+                    <!-- Buttons Section -->
+                    <div class="mt-4 flex space-x-3">
+                        <button onclick="editBook(${index})" 
+                            class="bg-green-600 text-white px-4 py-2 rounded-lg shadow-md 
+                                hover:bg-green-700 hover:shadow-xl hover:translate-y-[-2px] transition duration-300">
+                            ✏️ Edit
+                        </button>
 
-        <button onclick="deleteBook(${index})" 
-            class="bg-red-600 text-white px-4 py-2 rounded-lg shadow-md 
-                hover:bg-red-700 hover:shadow-xl hover:translate-y-[-2px] transition duration-300">
-            🗑️ Delete
-        </button>
-    </div>
-</div>
-`;
-        });
+                        <button onclick="deleteBook(${index})" 
+                            class="bg-red-600 text-white px-4 py-2 rounded-lg shadow-md 
+                                hover:bg-red-700 hover:shadow-xl hover:translate-y-[-2px] transition duration-300">
+                            🗑️ Delete
+                        </button>
+                    </div>
+                </div>
+                `;
+            });
 
-    updateBookStats(); // Update stats every time books are displayed
-}
+            updateBookStats();
+    }
 
 
-function editBook(index) {
-            const book = books[index];
-            document.getElementById("edit-title").value = book.title;
-            document.getElementById("edit-author").value = book.author;
-            document.getElementById("edit-isbn").value = book.isbn;
-            document.getElementById("edit-status").value = book.status;
-            editIndex = index;
-            document.getElementById("edit-modal").classList.remove("hidden");
-        }
+            function editBook(index) {
+                const book = books[index];
+                document.getElementById("edit-title").value = book.title;
+                document.getElementById("edit-author").value = book.author;
+                document.getElementById("edit-isbn").value = book.isbn;
+                document.getElementById("edit-status").value = book.status;
+                editIndex = index;
+                document.getElementById("edit-modal").classList.remove("hidden");
+            }
 
-        function closeEditModal() {
-            document.getElementById("edit-modal").classList.add("hidden");
-        }
+            function closeEditModal() {
+                document.getElementById("edit-modal").classList.add("hidden");
+            }
 
-        document.getElementById("edit-book-form").addEventListener("submit", function(event) {
-            event.preventDefault();
-            const title = document.getElementById("edit-title").value;
-            const author = document.getElementById("edit-author").value;
-            const isbn = document.getElementById("edit-isbn").value;
-            const status = document.getElementById("edit-status").value;
-            const imageFile = document.getElementById("edit-image").files[0];
+            document.getElementById("edit-book-form").addEventListener("submit", function(event) {
+                event.preventDefault();
+                const title = document.getElementById("edit-title").value;
+                const author = document.getElementById("edit-author").value;
+                const isbn = document.getElementById("edit-isbn").value;
+                const status = document.getElementById("edit-status").value;
+                const imageFile = document.getElementById("edit-image").files[0];
 
-            if (imageFile) {
-                const reader = new FileReader();
-                reader.readAsDataURL(imageFile);
-                reader.onload = function () {
-                    const image = reader.result;
-                    books[editIndex] = { title, author, isbn, status, image };
+                if (imageFile) {
+                    const reader = new FileReader();
+                    reader.readAsDataURL(imageFile);
+                    reader.onload = function () {
+                        const image = reader.result;
+                        books[editIndex] = { title, author, isbn, status, image };
+                        localStorage.setItem('books', JSON.stringify(books));
+                        displayBooks();
+                        closeEditModal();
+                    };
+                } else {
+                    books[editIndex] = { ...books[editIndex], title, author, isbn, status };
                     localStorage.setItem('books', JSON.stringify(books));
                     displayBooks();
                     closeEditModal();
-                };
-            } else {
-                books[editIndex] = { ...books[editIndex], title, author, isbn, status };
-                localStorage.setItem('books', JSON.stringify(books));
-                displayBooks();
-                closeEditModal();
+                }
+            });
+
+            bookForm.addEventListener("submit", function (event) {
+                event.preventDefault();
+                const title = document.getElementById("title").value;
+                const author = document.getElementById("author").value;
+                const isbn = document.getElementById("isbn").value;
+                const status = document.getElementById("status").value;
+                const imageFile = document.getElementById("image").files[0];
+
+                if (imageFile) {
+                    const reader = new FileReader();
+                    reader.readAsDataURL(imageFile);
+                    reader.onload = function () {
+                        books.push({ title, author, isbn, status, image: reader.result });
+                        localStorage.setItem("books", JSON.stringify(books));
+                        displayBooks();
+                        bookForm.reset();
+                    };
+                } else {
+                    books.push({ title, author, isbn, status, image: "" });
+                    localStorage.setItem("books", JSON.stringify(books));
+                    displayBooks();
+                    bookForm.reset();
+                }
+            });
+
+            function deleteBook(index) {
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "You won't be able to revert this!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#C9A66B",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes, delete it!",
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        books.splice(index, 1);
+                        localStorage.setItem("books", JSON.stringify(books));
+                        displayBooks();
+                        Swal.fire("Deleted!", "Your book has been removed.", "success");
+                    }
+                });
             }
-        });
-// Add book function
-bookForm.addEventListener("submit", function (event) {
-    event.preventDefault();
-    const title = document.getElementById("title").value;
-    const author = document.getElementById("author").value;
-    const isbn = document.getElementById("isbn").value;
-    const status = document.getElementById("status").value;
-    const imageFile = document.getElementById("image").files[0];
 
-    if (imageFile) {
-        const reader = new FileReader();
-        reader.readAsDataURL(imageFile);
-        reader.onload = function () {
-            books.push({ title, author, isbn, status, image: reader.result });
-            localStorage.setItem("books", JSON.stringify(books));
+            searchInput.addEventListener("input", function () {
+                const filter = searchInput.value.toLowerCase();
+                displayBooks(filter);
+            });
+
             displayBooks();
-            bookForm.reset();
-        };
-    } else {
-        books.push({ title, author, isbn, status, image: "" });
-        localStorage.setItem("books", JSON.stringify(books));
-        displayBooks();
-        bookForm.reset();
-    }
-});
 
-// Delete book function
-function deleteBook(index) {
-    Swal.fire({
-        title: "Are you sure?",
-        text: "You won't be able to revert this!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#C9A66B",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, delete it!",
-    }).then((result) => {
-        if (result.isConfirmed) {
-            books.splice(index, 1);
-            localStorage.setItem("books", JSON.stringify(books));
-            displayBooks();
-            Swal.fire("Deleted!", "Your book has been removed.", "success");
-        }
-    });
-}
-
-// Search function
-searchInput.addEventListener("input", function () {
-    const filter = searchInput.value.toLowerCase();
-    displayBooks(filter);
-});
-
-// Initial display of books
-displayBooks();
-
-document.getElementById("edit-book-form").addEventListener("submit", function(event) {
-    event.preventDefault();
-    const title = document.getElementById("edit-title").value;
-    const author = document.getElementById("edit-author").value;
-    const isbn = document.getElementById("edit-isbn").value;
-    const status = document.getElementById("edit-status").value;
-    const imageFile = document.getElementById("edit-image").files[0];
-    // ...existing code...
-});
+            document.getElementById("edit-book-form").addEventListener("submit", function(event) {
+                event.preventDefault();
+                const title = document.getElementById("edit-title").value;
+                const author = document.getElementById("edit-author").value;
+                const isbn = document.getElementById("edit-isbn").value;
+                const status = document.getElementById("edit-status").value;
+                const imageFile = document.getElementById("edit-image").files[0];
+            });
 
         </script>
-
-        <!-- JavaScript for Sidebar Toggle -->
         <script>
-            const sidebar = document.getElementById("sidebar");
-            const burgerBtn = document.getElementById("burger-btn");
-            const closeBtn = document.getElementById("close-btn");
-            const overlay = document.getElementById("overlay");
-            const body = document.body;
+                const sidebar = document.getElementById("sidebar");
+                const burgerBtn = document.getElementById("burger-btn");
+                const closeBtn = document.getElementById("close-btn");
+                const overlay = document.getElementById("overlay");
+                const body = document.body;
 
-            function openSidebar() {
-                sidebar.classList.remove("-translate-x-full");
-                overlay.classList.remove("hidden");
-                body.classList.add("overflow-hidden"); // Prevent scrolling
-            }
+                function openSidebar() {
+                    sidebar.classList.remove("-translate-x-full");
+                    overlay.classList.remove("hidden");
+                    body.classList.add("overflow-hidden"); 
+                }
 
-            function closeSidebar() {
-                sidebar.classList.add("-translate-x-full");                overlay.classList.add("hidden");
-                body.classList.remove("overflow-hidden"); // Restore scrolling
-            }
+                function closeSidebar() {
+                    sidebar.classList.add("-translate-x-full");                
+                    overlay.classList.add("hidden");
+                    body.classList.remove("overflow-hidden"); 
+                }
 
-            burgerBtn.addEventListener("click", openSidebar);
-            closeBtn.addEventListener("click", closeSidebar);
-            overlay.addEventListener("click", closeSidebar);
+                burgerBtn.addEventListener("click", openSidebar);
+                closeBtn.addEventListener("click", closeSidebar);
+                overlay.addEventListener("click", closeSidebar);
         </script>
     </body>
 </html>
