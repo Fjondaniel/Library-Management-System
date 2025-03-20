@@ -24,10 +24,10 @@
     <body class="bg-[#F5E1DA] min-h-screen flex flex-col md:flex-row">
     <div id="sidebar" class="fixed inset-y-0 left-0 w-64 bg-[#5C4033] text-[#EDE0D4] p-6 shadow-xl transform -translate-x-full transition-transform duration-300 ease-in-out z-50 md:translate-x-0 md:relative md:w-64">
             <!-- Close Button -->
-            <button id="close-btn" class="md:hidden absolute top-4 right-4 text-2xl text-white">&times;</button>
+            <button id="close-btn" class="md:hidden absolute top-1 right-3 text-2xl text-white">&times;</button>
             
 
-            <h1 class="text-3xl font-bold mb-4">
+            <h1 class="text-3xl font-bold mb-6 mt-4">
                 <img src="./img/StackOverbook.png" alt="Stack OverBook" class="logo">
             </h1>
             <h2 class="text-lg font-semibold mb-2">Manage Your Books</h2>
@@ -62,7 +62,7 @@
         <!-- Main Content -->
         <div class="flex-1 flex flex-col min-h-screen justify-between">
             <nav class="bg-[#5C4033] text-white p-4 shadow-md flex justify-between items-center">
-                <h1 class="text-xl mt-4 font-bold">📖 Library Management</h1>
+                <h1 class="text-xl mt-8 font-bold">📖 Library Management</h1>
                 <input type="text" id="search" placeholder="Search books..." class="border p-2 rounded-lg text-gray-900 w-72">
                 <button id="burger-btn" class="md:hidden  z-50 bg-[#5C4033] text-white p-3 rounded-lg shadow-lg">
                     ☰
@@ -113,8 +113,8 @@
                     </select>
                     
                     <div class="w-full bg-[#8B5A2B] text-white rounded-lg shadow-md cursor-pointer hover:bg-[#6D4227] transition p-2">
-                        <input type="file" id="image" class="hidden" accept="image/*">
-                        <label for="image" class="text-white px-4 py-2 text-center">
+                        <input type="file" id="edit-image" class="hidden" accept="image/*">
+                        <label for="edit-image" class="text-white px-4 py-2 text-center">
                             📜 Upload Book Cover
                         </label>                  
                         <span id="edit-file-name" class="ml-3 text-gray-700 italic"></span>
@@ -175,6 +175,46 @@ function displayBooks(filter = "") {
     updateBookStats(); // Update stats every time books are displayed
 }
 
+
+function editBook(index) {
+            const book = books[index];
+            document.getElementById("edit-title").value = book.title;
+            document.getElementById("edit-author").value = book.author;
+            document.getElementById("edit-isbn").value = book.isbn;
+            document.getElementById("edit-status").value = book.status;
+            editIndex = index;
+            document.getElementById("edit-modal").classList.remove("hidden");
+        }
+
+        function closeEditModal() {
+            document.getElementById("edit-modal").classList.add("hidden");
+        }
+
+        document.getElementById("edit-book-form").addEventListener("submit", function(event) {
+            event.preventDefault();
+            const title = document.getElementById("edit-title").value;
+            const author = document.getElementById("edit-author").value;
+            const isbn = document.getElementById("edit-isbn").value;
+            const status = document.getElementById("edit-status").value;
+            const imageFile = document.getElementById("edit-image").files[0];
+
+            if (imageFile) {
+                const reader = new FileReader();
+                reader.readAsDataURL(imageFile);
+                reader.onload = function () {
+                    const image = reader.result;
+                    books[editIndex] = { title, author, isbn, status, image };
+                    localStorage.setItem('books', JSON.stringify(books));
+                    displayBooks();
+                    closeEditModal();
+                };
+            } else {
+                books[editIndex] = { ...books[editIndex], title, author, isbn, status };
+                localStorage.setItem('books', JSON.stringify(books));
+                displayBooks();
+                closeEditModal();
+            }
+        });
 // Add book function
 bookForm.addEventListener("submit", function (event) {
     event.preventDefault();
@@ -230,6 +270,16 @@ searchInput.addEventListener("input", function () {
 // Initial display of books
 displayBooks();
 
+document.getElementById("edit-book-form").addEventListener("submit", function(event) {
+    event.preventDefault();
+    const title = document.getElementById("edit-title").value;
+    const author = document.getElementById("edit-author").value;
+    const isbn = document.getElementById("edit-isbn").value;
+    const status = document.getElementById("edit-status").value;
+    const imageFile = document.getElementById("edit-image").files[0];
+    // ...existing code...
+});
+
         </script>
 
         <!-- JavaScript for Sidebar Toggle -->
@@ -247,8 +297,7 @@ displayBooks();
             }
 
             function closeSidebar() {
-                sidebar.classList.add("-translate-x-full");
-                overlay.classList.add("hidden");
+                sidebar.classList.add("-translate-x-full");                overlay.classList.add("hidden");
                 body.classList.remove("overflow-hidden"); // Restore scrolling
             }
 
@@ -258,4 +307,3 @@ displayBooks();
         </script>
     </body>
 </html>
-<!-- check -->
