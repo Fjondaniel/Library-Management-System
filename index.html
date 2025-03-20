@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Management System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex">
+    
+    <!-- Sidebar -->
+    <aside class="bg-blue-600 text-white w-64 min-h-screen p-6 shadow-lg">
+        <h1 class="text-2xl font-bold mb-6">📗 Stack OverBooks</h1>
+        <h2 class="text-lg font-semibold mb-4">Manage Your Books</h2>
+        <!-- Book Form -->
+        <form id="book-form" class="flex flex-col space-y-4" enctype="multipart/form-data">
+            <input type="text" id="title" placeholder="Title" class="border p-2 rounded-lg text-gray-800 w-full" required>
+            <input type="text" id="author" placeholder="Author" class="border p-2 rounded-lg text-gray-800 w-full" required>
+            <input type="text" id="isbn" placeholder="ISBN" class="border p-2 rounded-lg text-gray-800 w-full" required>
+            <input type="file" id="image" class="border p-2 rounded-lg text-gray-800 w-full" accept="image/*">
+            <button type="submit" class="bg-green-600 text-white p-2 rounded-lg shadow-md hover:bg-green-700">Add Book</button>
+        </form>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col min-h-screen justify-between">
+
+        <!-- Navbar -->
+        <nav class="bg-blue-600 text-white p-4 shadow-lg flex justify-between items-center">
+            <h1 class="text-2xl font-bold">📚 Library Management</h1>
+            <input type="text" id="search" placeholder="Search books..." class="border p-2 rounded-lg text-gray-800 w-72">
+        </nav>
+        
+        <!-- Book List Section -->
+        <section class="max-w-5xl mx-auto bg-white p-8 rounded-lg shadow-lg mt-6">
+            <h2 class="text-2xl font-bold text-center text-gray-800 mb-4">Book Collection</h2>
+            <div id="book-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="bg-gray-800 text-white text-center p-4 mt-6">
+            <p>&copy; 2025 Stack OverBooks Library. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        const bookForm = document.getElementById("book-form");
+        const bookList = document.getElementById("book-list");
+        const searchInput = document.getElementById("search");
+        let books = [];
+
+        bookForm.addEventListener("submit", function(event) {
+            event.preventDefault();
+            const title = document.getElementById("title").value;
+            const author = document.getElementById("author").value;
+            const isbn = document.getElementById("isbn").value;
+            const imageFile = document.getElementById("image").files[0];
+            
+            const reader = new FileReader();
+            reader.readAsDataURL(imageFile);
+            reader.onload = function () {
+                const image = reader.result;
+                
+                const book = { title, author, isbn, image };
+                books.push(book);
+                displayBooks();
+                bookForm.reset();
+            };
+        });
+
+        function displayBooks(filter = "") {
+            bookList.innerHTML = "";
+            books.filter(book => book.title.toLowerCase().includes(filter) || book.author.toLowerCase().includes(filter) || book.isbn.includes(filter))
+                .forEach((book, index) => {
+                    bookList.innerHTML += `
+                        <div class="bg-white p-4 rounded-lg shadow-md flex flex-col items-center">
+                            <img src="${book.image}" alt="Book Cover" class="w-32 h-40 object-cover rounded-lg mb-2">
+                            <h3 class="text-lg font-bold text-center">${book.title}</h3>
+                            <p class="text-gray-700 text-center">${book.author}</p>
+                            <p class="text-gray-500 text-sm text-center">ISBN: ${book.isbn}</p>
+                            <div class="mt-2 flex space-x-2">
+                                <button onclick="editBook(${index})" class="bg-yellow-500 text-white px-3 py-1 rounded-lg shadow-md hover:bg-yellow-600">Edit</button>
+                                <button onclick="deleteBook(${index})" class="bg-red-500 text-white px-3 py-1 rounded-lg shadow-md hover:bg-red-600">Delete</button>
+                            </div>
+                        </div>`;
+                });
+        }
+
+        function editBook(index) {
+            const book = books[index];
+            document.getElementById("title").value = book.title;
+            document.getElementById("author").value = book.author;
+            document.getElementById("isbn").value = book.isbn;
+            books.splice(index, 1);
+            displayBooks();
+        }
+
+        function deleteBook(index) {
+            books.splice(index, 1);
+            displayBooks();
+        }
+
+        searchInput.addEventListener("input", function() {
+            const filter = searchInput.value.toLowerCase();
+            displayBooks(filter);
+        });
+    </script>
+</body>
+</html>
