@@ -10,16 +10,21 @@
         body { font-family: 'Garamond', serif; }
     </style>
 </head>
-<body class="bg-[#F5E1DA] min-h-screen flex">
+<body class="bg-[#F5E1DA] min-h-screen flex flex-col md:flex-row">
     
     <!-- Sidebar -->
-    <aside class="bg-[#5C4033] text-[#EDE0D4] w-64 min-h-screen p-6 shadow-xl">
+    <aside class="bg-[#5C4033] text-[#EDE0D4] w-full md:w-64 min-h-screen p-6 shadow-xl">
         <h1 class="text-2xl font-bold mb-6">📜 Antique Bookstore</h1>
         <h2 class="text-lg font-semibold mb-4">Manage Your Books</h2>
         <form id="book-form" class="flex flex-col space-y-4">
             <input type="text" id="title" placeholder="Title" class="border p-2 rounded-lg text-gray-900 w-full" required>
             <input type="text" id="author" placeholder="Author" class="border p-2 rounded-lg text-gray-900 w-full" required>
             <input type="text" id="isbn" placeholder="ISBN" class="border p-2 rounded-lg text-gray-900 w-full" required>
+            <select id="status" class="border p-2 rounded-lg text-gray-900 w-full" required>
+                <option value="" disabled selected>Availability Status</option>
+                <option value="available">Available</option>
+                <option value="unavailable">Unavailable</option>
+            </select>
             
             <div class=" w-full bg-[#8B5A2B] text-white rounded-lg shadow-md cursor-pointer hover:bg-[#6D4227] transition">
                 <input type="file" id="image" class="hidden" accept="image/*">
@@ -35,6 +40,35 @@
         </form>
     </aside>
     
+    <!-- Edit Book Modal -->
+    <div id="edit-modal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center hidden">
+        <div class="bg-white p-6 rounded-lg shadow-lg w-11/12 md:w-96">
+            <h2 class="text-2xl font-bold mb-4">Edit Book</h2>
+            <form id="edit-book-form" class="flex flex-col space-y-4">
+                <input type="text" id="edit-title" placeholder="Title" class="border p-2 rounded-lg text-gray-900 w-full" required>
+                <input type="text" id="edit-author" placeholder="Author" class="border p-2 rounded-lg text-gray-900 w-full" required>
+                <input type="text" id="edit-isbn" placeholder="ISBN" class="border p-2 rounded-lg text-gray-900 w-full" required>
+                <select id="edit-status" class="border p-2 rounded-lg text-gray-900 w-full" required>
+                    <option value="" disabled selected>Availability Status</option>
+                    <option value="available">Available</option>
+                    <option value="unavailable">Unavailable</option>
+                </select>
+                
+                <div class="w-full bg-[#8B5A2B] text-white rounded-lg shadow-md cursor-pointer hover:bg-[#6D4227] transition">
+                    <input type="file" id="edit-image" class="hidden" accept="image/*">
+                    <label for="edit-image" class="text-white px-4 py-4">
+                        📜 Upload Book Cover
+                    </label>
+                    <span id="edit-file-name" class="ml-3 text-gray-700 italic"></span>
+                </div>
+                
+                <div class="flex justify-end space-x-2">
+                    <button type="button" onclick="closeEditModal()" class="bg-gray-500 text-white p-2 rounded-lg shadow-md hover:bg-gray-600">Cancel</button>
+                    <button type="submit" class="bg-green-500 text-white p-2 rounded-lg shadow-md hover:bg-green-600">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
     
     <!-- Main Content -->
     <div class="flex-1 flex flex-col min-h-screen justify-between">
@@ -45,7 +79,7 @@
         
         <section class="max-w-5xl mx-auto bg-white p-8 rounded-lg shadow-lg mt-6">
             <h2 class="text-2xl font-bold text-center text-[#5C4033] mb-4">Book Collection</h2>
-            <div id="book-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+            <div id="book-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
         </section>
         
         <footer class="bg-[#5C4033] text-white text-center p-4 mt-6">
@@ -57,21 +91,24 @@
         const bookForm = document.getElementById("book-form");
         const bookList = document.getElementById("book-list");
         const searchInput = document.getElementById("search");
-        let books = [];
-        
+        let books = JSON.parse(localStorage.getItem('books')) || [];
+        let editIndex = null;
+
         bookForm.addEventListener("submit", function(event) {
             event.preventDefault();
             const title = document.getElementById("title").value;
             const author = document.getElementById("author").value;
             const isbn = document.getElementById("isbn").value;
+            const status = document.getElementById("status").value;
             const imageFile = document.getElementById("image").files[0];
             
             const reader = new FileReader();
             reader.readAsDataURL(imageFile);
             reader.onload = function () {
                 const image = reader.result;
-                const book = { title, author, isbn, image };
+                const book = { title, author, isbn, status, image };
                 books.push(book);
+                localStorage.setItem('books', JSON.stringify(books));
                 displayBooks();
                 bookForm.reset();
             };
@@ -87,10 +124,54 @@
                             <h3 class="text-lg font-bold text-center text-[#5C4033]">${book.title}</h3>
                             <p class="text-gray-700 text-center">${book.author}</p>
                             <p class="text-gray-500 text-sm text-center">ISBN: ${book.isbn}</p>
-                            <button onclick="deleteBook(${index})" class="bg-red-500 text-white px-3 py-1 mt-2 rounded-lg shadow-md hover:bg-red-600">Delete</button>
+                            <p class="text-gray-500 text-sm text-center">Status: ${book.status}</p>
+                            <div class="mt-2 flex space-x-2">
+                                <button onclick="editBook(${index})" class="bg-yellow-500 text-white px-3 py-1 rounded-lg shadow-md hover:bg-yellow-600">Edit</button>
+                                <button onclick="deleteBook(${index})" class="bg-red-500 text-white px-3 py-1 rounded-lg shadow-md hover:bg-red-600">Delete</button>
+                            </div>
                         </div>`;
                 });
         }
+
+        function editBook(index) {
+            const book = books[index];
+            document.getElementById("edit-title").value = book.title;
+            document.getElementById("edit-author").value = book.author;
+            document.getElementById("edit-isbn").value = book.isbn;
+            document.getElementById("edit-status").value = book.status;
+            editIndex = index;
+            document.getElementById("edit-modal").classList.remove("hidden");
+        }
+
+        function closeEditModal() {
+            document.getElementById("edit-modal").classList.add("hidden");
+        }
+
+        document.getElementById("edit-book-form").addEventListener("submit", function(event) {
+            event.preventDefault();
+            const title = document.getElementById("edit-title").value;
+            const author = document.getElementById("edit-author").value;
+            const isbn = document.getElementById("edit-isbn").value;
+            const status = document.getElementById("edit-status").value;
+            const imageFile = document.getElementById("edit-image").files[0];
+
+            if (imageFile) {
+                const reader = new FileReader();
+                reader.readAsDataURL(imageFile);
+                reader.onload = function () {
+                    const image = reader.result;
+                    books[editIndex] = { title, author, isbn, status, image };
+                    localStorage.setItem('books', JSON.stringify(books));
+                    displayBooks();
+                    closeEditModal();
+                };
+            } else {
+                books[editIndex] = { ...books[editIndex], title, author, isbn, status };
+                localStorage.setItem('books', JSON.stringify(books));
+                displayBooks();
+                closeEditModal();
+            }
+        });
 
         function deleteBook(index) {
             Swal.fire({
@@ -104,6 +185,7 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     books.splice(index, 1);
+                    localStorage.setItem('books', JSON.stringify(books));
                     displayBooks();
                     Swal.fire('Deleted!', 'Your book has been removed.', 'success');
                 }
@@ -114,6 +196,9 @@
             const filter = searchInput.value.toLowerCase();
             displayBooks(filter);
         });
+
+        // Initial display of books
+        displayBooks();
     </script>
 </body>
 </html>
