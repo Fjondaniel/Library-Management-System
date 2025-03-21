@@ -113,32 +113,29 @@
         }
     
         function login() {
-            const email = document.getElementById("login-email").value.trim();
-            const password = document.getElementById("login-password").value.trim();
-    
-            // Retrieve users from localStorage
-            let users = JSON.parse(localStorage.getItem("users")) || []; // Fix: Use "users"
-    
-            if (email === "admin@example.com" && password === "admin123") {
-                window.location.href = "dashboard.html"; // Admin Redirect
-            } else {
-                // Find user in stored data
-                const user = users.find(user => user.email === email);
-    
-                if (user) {
-                    if (user.password === password) {
-                        // Store logged-in user details
-                        localStorage.setItem("loggedInUser", JSON.stringify(user));
-    
-                        window.location.href = "user.html"; // Redirect user
-                    } else {
-                        alert("Incorrect password!"); // Password mismatch
-                    }
-                } else {
-                    alert("User not found! Please sign up first."); // Email not registered
-                }
-            }
-        }
+    const email = document.getElementById("login-email").value.trim();
+    const password = document.getElementById("login-password").value.trim();
+
+    // Retrieve users from localStorage
+    let users = JSON.parse(localStorage.getItem("users")) || [];
+
+    // Check if user is an admin
+    if (email === "admin@example.com" && password === "admin123") {
+        window.location.href = "dashboard.html"; // Admin Redirect
+        return;
+    }
+
+    // Find the user in the stored data
+    const user = users.find(user => user.email === email && user.password === password);
+
+    if (user) {
+        localStorage.setItem("loggedInUser", JSON.stringify(user));
+        window.location.href = "user.html"; // Redirect user
+    } else {
+        alert("Invalid email or password! Please try again or sign up.");
+    }
+}
+
     </script>
     
 
