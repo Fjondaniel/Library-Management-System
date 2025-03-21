@@ -67,10 +67,10 @@
                     </button>
                 </nav>
                 <section class="max-w-5xl mx-auto bg-[#FAF3E0] p-8 rounded-lg shadow-xl mt-6 border border-[#C9A66B]">
-                    <h2 class="text-3xl font-extrabold text-center text-[#5C4033] mb-6 uppercase tracking-wide">
+                    <h2 class="text-3xl font-extrabold text-center text-[#5C4033] mb-6 uppercase tracking-wide cursor-pointer" id="stats-btn">
                         📊 Book Statistics
                     </h2>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 text-center">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
                         <div class="bg-white p-6 rounded-xl shadow-lg border-2 border-[#C9A66B] transition transform hover:scale-105 hover:shadow-xl">
                             <h3 class="text-xl font-semibold text-[#5C4033]">📚 Total Books</h3>
                             <p id="total-books" class="text-3xl font-bold text-[#8B5A2B] mt-2">0</p>
@@ -79,8 +79,40 @@
                             <h3 class="text-xl font-semibold text-[#5C4033]">✅ Available Books</h3>
                             <p id="available-books" class="text-3xl font-bold text-green-600 mt-2">0</p>
                         </div>
+                        <div class="bg-white p-6 rounded-xl shadow-lg border-2 border-blue-500 transition transform hover:scale-105 hover:shadow-xl">
+                            <h3 class="text-xl font-semibold text-[#5C4033]">✍️ Total Authors</h3>
+                            <p id="total-authors" class="text-3xl font-bold text-blue-600 mt-2">0</p>
+                        </div>
                     </div>
                 </section>
+                
+                <!-- Statistics Table (Hidden by Default) -->
+                <div id="stats-table" class="max-w-5xl mx-auto bg-white p-6 rounded-lg shadow-lg mt-6 hidden">
+                    <h2 class="text-2xl font-bold text-[#5C4033] text-center mb-4">📊 Book Statistics Table</h2>
+                    <table class="w-full border-collapse border border-[#C9A66B]">
+                        <thead>
+                            <tr class="bg-[#8B5A2B] text-white">
+                                <th class="border border-[#C9A66B] p-3">Statistic</th>
+                                <th class="border border-[#C9A66B] p-3">Count</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="border border-[#C9A66B] p-3 text-center">📚 Total Books</td>
+                                <td class="border border-[#C9A66B] p-3 text-center" id="table-total-books">0</td>
+                            </tr>
+                            <tr>
+                                <td class="border border-[#C9A66B] p-3 text-center">✅ Available Books</td>
+                                <td class="border border-[#C9A66B] p-3 text-center" id="table-available-books">0</td>
+                            </tr>
+                            <tr>
+                                <td class="border border-[#C9A66B] p-3 text-center">✍️ Total Authors</td>
+                                <td class="border border-[#C9A66B] p-3 text-center" id="table-total-authors">0</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
                 <section class="max-w-6xl mx-auto bg-white p-12 rounded-2xl shadow-2xl mt-10">
                     <h2 class="text-3xl md:text-4xl font-extrabold text-center text-[#5C4033] mb-6 uppercase tracking-wide">
                         📚 Book Collection
@@ -94,6 +126,7 @@
                     <p>&copy; 2025 Antique Bookstore. All rights reserved.</p>
                 </footer>
         </div>
+
 
         <div id="edit-modal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center hidden">
                 <div class="bg-white p-8 rounded-lg shadow-lg w-11/12 md:w-96">
@@ -194,6 +227,38 @@
 
             updateBookStats();
     }
+    document.getElementById("stats-btn").addEventListener("click", function () {
+    const statsTable = document.getElementById("stats-table");
+    statsTable.classList.toggle("hidden");
+});
+
+function updateBookStats() {
+    const totalBooks = books.length;
+    const availableBooks = books.filter(book => book.status === "available").length;
+    
+    // Get unique authors
+    const authors = new Set(books.map(book => book.author));
+    const totalAuthors = authors.size;
+
+    // Update UI
+    document.getElementById("total-books").textContent = totalBooks;
+    document.getElementById("available-books").textContent = availableBooks;
+    document.getElementById("total-authors").textContent = totalAuthors;
+
+    // Update table data
+    document.getElementById("table-total-books").textContent = totalBooks;
+    document.getElementById("table-available-books").textContent = availableBooks;
+    document.getElementById("table-total-authors").textContent = totalAuthors;
+}
+
+// Call function when the page loads
+updateBookStats();
+
+
+document.getElementById("stats-btn").addEventListener("click", function() {
+    const statsTable = document.getElementById("stats-table");
+    statsTable.classList.toggle("hidden");
+});
 
 
             function editBook(index) {
