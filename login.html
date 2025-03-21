@@ -38,6 +38,7 @@
             <button id="show-signup" class="text-[#5C4033] font-semibold border-b-2 border-transparent hover:border-[#C9A66B] transition handwritten text-lg">Sign Up</button>
         </div>
 
+        <!-- LOGIN FORM -->
         <form id="login-form" class="fade-in">
             <h2 class="text-3xl font-bold text-center text-[#5C4033] mb-4 handwritten">Welcome Back</h2>
             <label class="block text-sm text-[#5C4033]">Email</label>
@@ -51,7 +52,8 @@
             <button type="button" onclick="login()" class="w-full bg-[#C9A66B] text-white p-2 rounded-lg mt-4 hover:bg-[#b78d50] transition">Login</button>
         </form>
         
-        <form id="signup-form" class="hidden fade-in">
+        <!-- SIGNUP FORM -->
+        <form id="signup-form" class="hidden fade-in" onsubmit="signup(event)">
             <h2 class="text-3xl font-bold text-center text-[#5C4033] mb-4 handwritten">Create Account</h2>
             <label class="block text-sm text-[#5C4033]">Full Name</label>
             <input type="text" id="signup-name" placeholder="Enter name" class="w-full p-2 mt-1 border rounded-lg bg-[#FAF3E0]" required>
@@ -71,7 +73,7 @@
                 <button type="button" class="absolute right-2 top-2 text-gray-600" onclick="togglePassword('confirm-password')">👁</button>
             </div>
             
-            <button type="submit" onclick="signup()" class="w-full bg-[#C9A66B] text-white p-2 rounded-lg mt-4 hover:bg-[#b78d50] transition">Sign Up</button>
+            <button type="submit" class="w-full bg-[#C9A66B] text-white p-2 rounded-lg mt-4 hover:bg-[#b78d50] transition">Sign Up</button>
         </form>
         
     </div>
@@ -92,70 +94,61 @@
             input.type = input.type === "password" ? "text" : "password";
         }
 
-        function signup() {
-    const name = document.getElementById("signup-name").value.trim();
-    const email = document.getElementById("signup-email").value.trim();
-    const password = document.getElementById("signup-password").value;
-    const confirmPassword = document.getElementById("signup-confirm-password").value;
+        function signup(event) {
+            event.preventDefault(); // Prevent page reload
+            
+            const name = document.getElementById("signup-name").value.trim();
+            const email = document.getElementById("signup-email").value.trim();
+            const password = document.getElementById("signup-password").value;
+            const confirmPassword = document.getElementById("confirm-password").value;
 
-    // Check if any field is empty
-    if (!name || !email || !password || !confirmPassword) {
-        alert("Please fill in all fields!");
-        return;
-    }
-
-    // Check if passwords match
-    if (password !== confirmPassword) {
-        alert("Passwords do not match!");
-        return;
-    }
-
-    // Retrieve existing users from localStorage
-    let users = JSON.parse(localStorage.getItem("users")) || [];
-
-    // Check if email is already registered
-    if (users.some(user => user.email === email)) {
-        alert("Email already registered! Please use a different email.");
-        return;
-    }
-
-    // Add new user
-    users.push({ name, email, password });
-    localStorage.setItem("users", JSON.stringify(users));
-
-    alert("Signup successful!");
-    window.location.href = "login.html"; // Redirect to login page after signup
-}
-
-function login() {
-    const email = document.getElementById("login-email").value.trim();
-    const password = document.getElementById("login-password").value.trim();
-
-    // Retrieve users from localStorage
-    let users = JSON.parse(localStorage.getItem("users")) || [];
-
-    if (email === "admin@example.com" && password === "admin123") {
-        window.location.href = "dashboard.html"; // Admin Redirect
-    } else {
-        // Find user in stored data
-        const user = users.find(user => user.email === email);
-
-        if (user) {
-            if (user.password === password) {
-                // Store logged-in user details
-                localStorage.setItem("loggedInUser", JSON.stringify(user));
-
-                window.location.href = "user.html"; // Redirect user
-            } else {
-                alert("Incorrect password!"); // Password mismatch
+            if (!name || !email || !password || !confirmPassword) {
+                alert("Please fill in all fields!");
+                return;
             }
-        } else {
-            alert("User not found! Please sign up first."); // Email not registered
+
+            if (password !== confirmPassword) {
+                alert("Passwords do not match!");
+                return;
+            }
+
+            let users = JSON.parse(localStorage.getItem("users")) || [];
+
+            if (users.some(user => user.email === email)) {
+                alert("Email is already registered!");
+                return;
+            }
+
+            users.push({ name, email, password });
+            localStorage.setItem("users", JSON.stringify(users));
+
+            alert("Signup successful! Please login.");
+            document.getElementById("show-login").click();
         }
-    }
-}
 
+        function login() {
+            const email = document.getElementById("login-email").value.trim();
+            const password = document.getElementById("login-password").value.trim();
+            
+            let users = JSON.parse(localStorage.getItem("users")) || [];
 
+            if (email === "admin@example.com" && password === "admin123") {
+                window.location.href = "dashboard.html";
+                return;
+            }
+
+            const foundUser = users.find(user => user.email === email);
+
+            if (foundUser) {
+                if (foundUser.password === password) {
+                    window.location.href = "user.html";
+                } else {
+                    alert("Incorrect password!");
+                }
+            } else {
+                alert("User not found! Please sign up first.");
+            }
+        }
     </script>
 
 </body>
