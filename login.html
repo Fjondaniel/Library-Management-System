@@ -65,6 +65,10 @@
             <button type="submit" class="w-full bg-[#C9A66B] text-white p-2 rounded-lg mt-4 hover:bg-[#b78d50] transition">Sign Up</button>
         </form>
     </div>
+    <div id="loading" class="hidden fixed inset-0 flex items-center justify-center bg-white bg-opacity-75">
+        <img src="./img/loading.gif" alt="Loading..." class="w-16 h-16">
+    </div>
+    
     <script>
         document.getElementById("show-login").addEventListener("click", function() {
             document.getElementById("login-form").classList.remove("hidden");
@@ -99,30 +103,34 @@
             document.getElementById("show-login").click();
         }
         function login() {
-    const email = document.getElementById("login-email").value.trim();
-    const password = document.getElementById("login-password").value.trim();
+    document.getElementById("loading").classList.remove("hidden"); // Show loader
 
-    let users = JSON.parse(localStorage.getItem("users")) || [];
+    setTimeout(() => {
+        const email = document.getElementById("login-email").value.trim();
+        const password = document.getElementById("login-password").value.trim();
 
-    if (email === "admin@example.com" && password === "admin123") {
-        window.location.href = "dashboard.html";
-        return;
-    }
+        let users = JSON.parse(localStorage.getItem("users")) || [];
 
-    const foundUser = users.find(user => user.email === email);
-
-    if (foundUser) {
-        if (foundUser.password === password) {
-            // Store the logged-in user in localStorage
-            localStorage.setItem("user", JSON.stringify(foundUser));
-
-            window.location.href = "user.html";
-        } else {
-            alert("Incorrect password!");
+        if (email === "admin@example.com" && password === "admin123") {
+            window.location.href = "dashboard.html";
+            return;
         }
-    } else {
-        alert("User not found! Please sign up first.");
-    }
+
+        const foundUser = users.find(user => user.email === email);
+
+        if (foundUser) {
+            if (foundUser.password === password) {
+                localStorage.setItem("user", JSON.stringify(foundUser));
+                window.location.href = "user.html";
+            } else {
+                alert("Incorrect password!");
+            }
+        } else {
+            alert("User not found! Please sign up first.");
+        }
+
+        document.getElementById("loading").classList.add("hidden"); // Hide loader
+    }, 1500); // Simulating delay (remove this in actual implementation)
 }
 
     </script>
