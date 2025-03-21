@@ -99,16 +99,32 @@
             document.getElementById("show-login").click();
         }
         function login() {
-            const email = document.getElementById("login-email").value.trim();
-            const password = document.getElementById("login-password").value.trim();
-            let users = JSON.parse(localStorage.getItem("users")) || [];
-            const user = users.find(user => user.email === email);
-            if (user && user.password === password) {
-                window.location.href = "user.html";
-            } else {
-                alert("Invalid credentials!");
-            }
+    const email = document.getElementById("login-email").value.trim();
+    const password = document.getElementById("login-password").value.trim();
+
+    let users = JSON.parse(localStorage.getItem("users")) || [];
+
+    if (email === "admin@example.com" && password === "admin123") {
+        window.location.href = "dashboard.html";
+        return;
+    }
+
+    const foundUser = users.find(user => user.email === email);
+
+    if (foundUser) {
+        if (foundUser.password === password) {
+            // Store the logged-in user in localStorage
+            localStorage.setItem("user", JSON.stringify(foundUser));
+
+            window.location.href = "user.html";
+        } else {
+            alert("Incorrect password!");
         }
+    } else {
+        alert("User not found! Please sign up first.");
+    }
+}
+
     </script>
 </body>
 </html>
