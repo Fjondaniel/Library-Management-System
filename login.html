@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Antique Bookstore | Login & Signup</title>
+    <style>
+        body {
+            background: url('https://images.unsplash.com/photo-1522143049013-2519756a52d9') no-repeat center center fixed;
+            background-size: cover;
+        }
+        .parchment {
+            background: url('https://www.transparenttextures.com/patterns/aged-paper.png');
+        }
+        .handwritten {
+            font-family: 'Dancing Script', cursive;
+        }
+        .fade-in {
+            animation: fadeIn 0.8s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500&display=swap" rel="stylesheet">
+</head>
+<body class="flex items-center justify-center min-h-screen bg-opacity-80 fade-in">
+
+    <div class="bg-[#EDE0D4] parchment p-8 rounded-lg shadow-2xl w-96 border border-[#8B5A2B] relative">
+        <div class="flex justify-center mb-4">
+            <img src="img/StackOverbook.png" alt="Bookstore Logo" class="w-20">
+        </div>
+
+        <div class="flex justify-between mb-6">
+            <button id="show-login" class="text-[#5C4033] font-semibold border-b-2 border-transparent hover:border-[#C9A66B] transition handwritten text-lg">Login</button>
+            <button id="show-signup" class="text-[#5C4033] font-semibold border-b-2 border-transparent hover:border-[#C9A66B] transition handwritten text-lg">Sign Up</button>
+        </div>
+
+        <form id="login-form" class="fade-in">
+            <h2 class="text-3xl font-bold text-center text-[#5C4033] mb-4 handwritten">Welcome Back</h2>
+            <label class="block text-sm text-[#5C4033]">Email</label>
+            <input type="email" id="login-email" placeholder="Enter email" class="w-full p-2 mt-1 border rounded-lg bg-[#FAF3E0]">
+            <label class="block text-sm text-[#5C4033] mt-3">Password</label>
+            <div class="relative">
+                <input type="password" id="login-password" placeholder="Enter password" class="w-full p-2 mt-1 border rounded-lg bg-[#FAF3E0]">
+                <button type="button" class="absolute right-2 top-2 text-gray-600" onclick="togglePassword('login-password')">👁</button>
+            </div>
+            <button type="button" onclick="login()" class="w-full bg-[#C9A66B] text-white p-2 rounded-lg mt-4 hover:bg-[#b78d50] transition">Login</button>
+        </form>
+
+        <form id="signup-form" class="hidden fade-in">
+            <h2 class="text-3xl font-bold text-center text-[#5C4033] mb-4 handwritten">Create Account</h2>
+            <label class="block text-sm text-[#5C4033]">Full Name</label>
+            <input type="text" id="signup-name" placeholder="Enter name" class="w-full p-2 mt-1 border rounded-lg bg-[#FAF3E0]">
+            <label class="block text-sm text-[#5C4033] mt-3">Email</label>
+            <input type="email" id="signup-email" placeholder="Enter email" class="w-full p-2 mt-1 border rounded-lg bg-[#FAF3E0]">
+            <label class="block text-sm text-[#5C4033] mt-3">Password</label>
+            <div class="relative">
+                <input type="password" id="signup-password" placeholder="Enter password" class="w-full p-2 mt-1 border rounded-lg bg-[#FAF3E0]">
+                <button type="button" class="absolute right-2 top-2 text-gray-600" onclick="togglePassword('signup-password')">👁</button>
+            </div>
+            <label class="block text-sm text-[#5C4033] mt-3">Confirm Password</label>
+            <div class="relative">
+                <input type="password" id="confirm-password" placeholder="Confirm password" class="w-full p-2 mt-1 border rounded-lg bg-[#FAF3E0]">
+                <button type="button" class="absolute right-2 top-2 text-gray-600" onclick="togglePassword('confirm-password')">👁</button>
+            </div>
+            <button type="button" onclick="signup()" class="w-full bg-[#C9A66B] text-white p-2 rounded-lg mt-4 hover:bg-[#b78d50] transition">Sign Up</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById("show-login").addEventListener("click", function() {
+            document.getElementById("login-form").classList.remove("hidden");
+            document.getElementById("signup-form").classList.add("hidden");
+        });
+
+        document.getElementById("show-signup").addEventListener("click", function() {
+            document.getElementById("signup-form").classList.remove("hidden");
+            document.getElementById("login-form").classList.add("hidden");
+        });
+
+        function togglePassword(id) {
+            var input = document.getElementById(id);
+            input.type = input.type === "password" ? "text" : "password";
+        }
+
+        function signup() {
+            let name = document.getElementById("signup-name").value;
+            let email = document.getElementById("signup-email").value;
+            let password = document.getElementById("signup-password").value;
+            let confirmPassword = document.getElementById("confirm-password").value;
+            if (password !== confirmPassword) {
+                alert("Passwords do not match!");
+                return;
+            }
+            localStorage.setItem("user", JSON.stringify({ name, email, password }));
+            alert("Signup successful! Please login.");
+            document.getElementById("show-login").click();
+        }
+
+        function login() {
+            const email = document.getElementById("login-email").value;
+            const password = document.getElementById("login-password").value;
+            if (email === "admin@example.com" && password === "admin123") {
+               
+                window.location.href = "dashboard.html";
+            } else {
+               
+                window.location.href = "dashboard.html";
+            }
+        }
+    </script>
+
+</body>
+</html>
