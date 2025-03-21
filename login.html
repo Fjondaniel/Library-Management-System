@@ -93,54 +93,68 @@
         }
 
         function signup() {
-            const name = document.getElementById("signup-name").value.trim();
-            const email = document.getElementById("signup-email").value.trim();
-            const password = document.getElementById("signup-password").value;
-            const confirmPassword = document.getElementById("signup-confirm-password").value;
+    const name = document.getElementById("signup-name").value.trim();
+    const email = document.getElementById("signup-email").value.trim();
+    const password = document.getElementById("signup-password").value;
+    const confirmPassword = document.getElementById("signup-confirm-password").value;
 
-            // Check if any field is empty
-            if (!name || !email || !password || !confirmPassword) {
-                alert("Please fill in all fields!");
-                return;
-            }
+    // Check if any field is empty
+    if (!name || !email || !password || !confirmPassword) {
+        alert("Please fill in all fields!");
+        return;
+    }
 
-            // Check if passwords match
-            if (password !== confirmPassword) {
-                alert("Passwords do not match!");
-                return;
-            }
+    // Check if passwords match
+    if (password !== confirmPassword) {
+        alert("Passwords do not match!");
+        return;
+    }
 
-            // Store user in localStorage
-            const user = { name, email, password };
-            localStorage.setItem("user", JSON.stringify(user));
+    // Retrieve existing users from localStorage
+    let users = JSON.parse(localStorage.getItem("users")) || [];
 
-            // Show success message and redirect
-            alert("Signup successful!");
-            window.location.href = "login.html"; // Redirect to login page after signup
-        }
+    // Check if email is already registered
+    if (users.some(user => user.email === email)) {
+        alert("Email already registered! Please use a different email.");
+        return;
+    }
 
+    // Add new user
+    users.push({ name, email, password });
+    localStorage.setItem("users", JSON.stringify(users));
 
-        function login() {
-            const email = document.getElementById("login-email").value;
-            const password = document.getElementById("login-password").value;
-            const user = JSON.parse(localStorage.getItem("user"));
+    alert("Signup successful!");
+    window.location.href = "login.html"; // Redirect to login page after signup
+}
 
-            if (email === "admin@example.com" && password === "admin123") {
-                window.location.href = "dashboard.html"; // Admin Redirect
-            } else if (user) {
-                if (user.email === email) {
-                    if (user.password === password) {
-                        window.location.href = "user.html"; // User Redirect
-                    } else {
-                        alert("Incorrect password!"); // Password mismatch
-                    }
-                } else {
-                    alert("User not found! Please sign up first."); // Email not registered
-                }
+function login() {
+    const email = document.getElementById("login-email").value.trim();
+    const password = document.getElementById("login-password").value.trim();
+
+    // Retrieve users from localStorage
+    let users = JSON.parse(localStorage.getItem("users")) || [];
+
+    if (email === "admin@example.com" && password === "admin123") {
+        window.location.href = "dashboard.html"; // Admin Redirect
+    } else {
+        // Find user in stored data
+        const user = users.find(user => user.email === email);
+
+        if (user) {
+            if (user.password === password) {
+                // Store logged-in user details
+                localStorage.setItem("loggedInUser", JSON.stringify(user));
+
+                window.location.href = "user.html"; // Redirect user
             } else {
-                alert("User not found! Please sign up first."); // No user in local storage
+                alert("Incorrect password!"); // Password mismatch
             }
+        } else {
+            alert("User not found! Please sign up first."); // Email not registered
         }
+    }
+}
+
 
     </script>
 
