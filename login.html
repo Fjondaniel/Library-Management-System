@@ -77,86 +77,70 @@
     </div>
 
     <script>
-        document.getElementById("show-login").addEventListener("click", function() {
-            document.getElementById("login-form").classList.remove("hidden");
-            document.getElementById("signup-form").classList.add("hidden");
-        });
-
-        document.getElementById("show-signup").addEventListener("click", function() {
-            document.getElementById("signup-form").classList.remove("hidden");
-            document.getElementById("login-form").classList.add("hidden");
-        });
-
-        function togglePassword(id) {
-            var input = document.getElementById(id);
-            input.type = input.type === "password" ? "text" : "password";
-        }
-
         function signup() {
-    const name = document.getElementById("signup-name").value.trim();
-    const email = document.getElementById("signup-email").value.trim();
-    const password = document.getElementById("signup-password").value;
-    const confirmPassword = document.getElementById("signup-confirm-password").value;
-
-    // Check if any field is empty
-    if (!name || !email || !password || !confirmPassword) {
-        alert("Please fill in all fields!");
-        return;
-    }
-
-    // Check if passwords match
-    if (password !== confirmPassword) {
-        alert("Passwords do not match!");
-        return;
-    }
-
-    // Retrieve existing users from localStorage
-    let users = JSON.parse(localStorage.getItem("users")) || [];
-
-    // Check if email is already registered
-    if (users.some(user => user.email === email)) {
-        alert("Email already registered! Please use a different email.");
-        return;
-    }
-
-    // Add new user
-    users.push({ name, email, password });
-    localStorage.setItem("users", JSON.stringify(users));
-
-    alert("Signup successful!");
-    window.location.href = "login.html"; // Redirect to login page after signup
-}
-
-function login() {
-    const email = document.getElementById("login-email").value.trim();
-    const password = document.getElementById("login-password").value.trim();
-
-    // Retrieve users from localStorage
-    let users = JSON.parse(localStorage.getItem("users")) || [];
-
-    if (email === "admin@example.com" && password === "admin123") {
-        window.location.href = "dashboard.html"; // Admin Redirect
-    } else {
-        // Find user in stored data
-        const user = users.find(user => user.email === email);
-
-        if (user) {
-            if (user.password === password) {
-                // Store logged-in user details
-                localStorage.setItem("loggedInUser", JSON.stringify(user));
-
-                window.location.href = "user.html"; // Redirect user
-            } else {
-                alert("Incorrect password!"); // Password mismatch
+            const name = document.getElementById("signup-name").value.trim();
+            const email = document.getElementById("signup-email").value.trim();
+            const password = document.getElementById("signup-password").value;
+            const confirmPassword = document.getElementById("confirm-password").value; // Fix ID
+    
+            // Check if any field is empty
+            if (!name || !email || !password || !confirmPassword) {
+                alert("Please fill in all fields!");
+                return;
             }
-        } else {
-            alert("User not found! Please sign up first."); // Email not registered
+    
+            // Check if passwords match
+            if (password !== confirmPassword) {
+                alert("Passwords do not match!");
+                return;
+            }
+    
+            // Retrieve existing users from localStorage
+            let users = JSON.parse(localStorage.getItem("users")) || [];
+    
+            // Check if email is already registered
+            if (users.some(user => user.email === email)) {
+                alert("Email already registered! Please use a different email.");
+                return;
+            }
+    
+            // Add new user
+            users.push({ name, email, password });
+            localStorage.setItem("users", JSON.stringify(users)); // Fix: Store under "users"
+    
+            alert("Signup successful!");
+            window.location.href = "login.html"; // Redirect to login page after signup
         }
-    }
-}
-
-
+    
+        function login() {
+            const email = document.getElementById("login-email").value.trim();
+            const password = document.getElementById("login-password").value.trim();
+    
+            // Retrieve users from localStorage
+            let users = JSON.parse(localStorage.getItem("users")) || []; // Fix: Use "users"
+    
+            if (email === "admin@example.com" && password === "admin123") {
+                window.location.href = "dashboard.html"; // Admin Redirect
+            } else {
+                // Find user in stored data
+                const user = users.find(user => user.email === email);
+    
+                if (user) {
+                    if (user.password === password) {
+                        // Store logged-in user details
+                        localStorage.setItem("loggedInUser", JSON.stringify(user));
+    
+                        window.location.href = "user.html"; // Redirect user
+                    } else {
+                        alert("Incorrect password!"); // Password mismatch
+                    }
+                } else {
+                    alert("User not found! Please sign up first."); // Email not registered
+                }
+            }
+        }
     </script>
+    
 
 </body>
 </html>
