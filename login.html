@@ -71,7 +71,7 @@
                 <button type="button" class="absolute right-2 top-2 text-gray-600" onclick="togglePassword('confirm-password')">👁</button>
             </div>
             
-            <button type="button" onclick="signup()" class="w-full bg-[#C9A66B] text-white p-2 rounded-lg mt-4 hover:bg-[#b78d50] transition">Sign Up</button>
+            <button type="submit" onclick="signup()" class="w-full bg-[#C9A66B] text-white p-2 rounded-lg mt-4 hover:bg-[#b78d50] transition">Sign Up</button>
         </form>
         
     </div>
@@ -93,30 +93,55 @@
         }
 
         function signup() {
-            let name = document.getElementById("signup-name").value;
-            let email = document.getElementById("signup-email").value;
-            let password = document.getElementById("signup-password").value;
-            let confirmPassword = document.getElementById("confirm-password").value;
+            const name = document.getElementById("signup-name").value.trim();
+            const email = document.getElementById("signup-email").value.trim();
+            const password = document.getElementById("signup-password").value;
+            const confirmPassword = document.getElementById("signup-confirm-password").value;
+
+            // Check if any field is empty
+            if (!name || !email || !password || !confirmPassword) {
+                alert("Please fill in all fields!");
+                return;
+            }
+
+            // Check if passwords match
             if (password !== confirmPassword) {
                 alert("Passwords do not match!");
                 return;
             }
-            localStorage.setItem("user", JSON.stringify({ name, email, password }));
-            alert("Signup successful! Please login.");
-            document.getElementById("show-login").click();
+
+            // Store user in localStorage
+            const user = { name, email, password };
+            localStorage.setItem("user", JSON.stringify(user));
+
+            // Show success message and redirect
+            alert("Signup successful!");
+            window.location.href = "login.html"; // Redirect to login page after signup
         }
+
 
         function login() {
             const email = document.getElementById("login-email").value;
             const password = document.getElementById("login-password").value;
             const user = JSON.parse(localStorage.getItem("user"));
 
-            if (user && user.email === email && user.password === password) {
-                window.location.href = "dashboard.html";
+            if (email === "admin@example.com" && password === "admin123") {
+                window.location.href = "admin.html"; // Admin Redirect
+            } else if (user) {
+                if (user.email === email) {
+                    if (user.password === password) {
+                        window.location.href = "dashboard.html"; // User Redirect
+                    } else {
+                        alert("Incorrect password!"); // Password mismatch
+                    }
+                } else {
+                    alert("User not found! Please sign up first."); // Email not registered
+                }
             } else {
-                alert("Invalid email or password!");
+                alert("User not found! Please sign up first."); // No user in local storage
             }
         }
+
     </script>
 
 </body>
