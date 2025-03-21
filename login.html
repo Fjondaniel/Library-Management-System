@@ -126,11 +126,11 @@
             const user = JSON.parse(localStorage.getItem("user"));
 
             if (email === "admin@example.com" && password === "admin123") {
-                window.location.href = "admin.html"; // Admin Redirect
+                window.location.href = "dashboard.html"; // Admin Redirect
             } else if (user) {
                 if (user.email === email) {
                     if (user.password === password) {
-                        window.location.href = "dashboard.html"; // User Redirect
+                        window.location.href = "user.html"; // User Redirect
                     } else {
                         alert("Incorrect password!"); // Password mismatch
                     }

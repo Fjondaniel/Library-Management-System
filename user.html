@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library - User Side</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#FAF3E0]">
+
+    <!-- Navbar -->
+    <nav class="bg-[#C9A66B] p-4 shadow-lg">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-white">📚 Library</h1>
+            <input type="text" id="search" placeholder="Search books..."
+                class="px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-[#5C4033]">
+        </div>
+    </nav>
+
+    <!-- Breadcrumb -->
+    <div class="max-w-6xl mx-auto my-4 px-4">
+        <p class="text-gray-600">
+            <a href="dashboard.html" class="text-blue-500 hover:underline">Home</a> > 
+            <span class="text-[#5C4033] font-semibold">Library</span> > 
+            <span id="user-name" class="text-[#C9A66B] font-bold"></span>
+        </p>
+    </div>
+
+    <!-- Book Container -->
+    <div class="max-w-6xl mx-auto py-6 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6" id="book-list">
+        <!-- Books will be displayed here -->
+    </div>
+
+    <script>
+        // Check if user is logged in
+        const user = JSON.parse(localStorage.getItem("user"));
+        if (!user) {
+            window.location.href = "login.html"; // Redirect to login if not logged in
+        } else {
+            document.getElementById("user-name").textContent = user.name || "User";
+        }
+
+        // Fetch books from localStorage
+        const bookList = document.getElementById("book-list");
+        const searchInput = document.getElementById("search");
+        let books = JSON.parse(localStorage.getItem("books")) || [];
+
+        function displayBooks(filter = "") {
+            bookList.innerHTML = "";
+            books
+                .filter(book =>
+                    book.title.toLowerCase().includes(filter) ||
+                    book.author.toLowerCase().includes(filter) ||
+                    book.isbn.includes(filter)
+                )
+                .forEach(book => {
+                    bookList.innerHTML += `
+                        <div class="bg-[#FAF3E0] p-5 rounded-xl shadow-lg flex flex-col items-center border border-[#C9A66B] 
+                            hover:shadow-2xl hover:scale-105 transition-transform duration-300 ease-in-out">
+                    
+                            <div class="overflow-hidden rounded-lg">
+                                <img src="${book.image}" alt="Book Cover" class="w-36 h-48 object-cover rounded-lg transition-transform duration-300 hover:scale-110">
+                            </div>
+
+                            <h3 class="text-xl font-semibold text-[#5C4033] text-center mt-3">${book.title}</h3>
+                            <p class="text-gray-700 text-center text-sm">${book.author}</p>
+                            <p class="text-gray-500 text-xs text-center font-medium">ISBN: ${book.isbn}</p>
+                            <p class="text-xs text-center font-medium ${book.status === 'available' ? 'text-green-600' : 'text-red-600'}">
+                                Status: ${book.status}
+                            </p>
+                        </div>
+                    `;
+                });
+        }
+
+        searchInput.addEventListener("input", function () {
+            const filter = searchInput.value.toLowerCase();
+            displayBooks(filter);
+        });
+
+        displayBooks();
+    </script>
+
+</body>
+</html>
